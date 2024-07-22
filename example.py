@@ -12,9 +12,9 @@ sdk.login()
 order = OrderObject(
     buy_sell = Action.Buy,
     price_flag = PriceFlag.Limit,
-    price = 946,
-    stock_no = "2330",
-    quantity = 50,
+    price = 1200,
+    stock_no = "2454",
+    quantity = 15,
     ap_code = APCode.IntradayOdd
 )
 sdk.place_order(order)
