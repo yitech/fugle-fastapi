@@ -11,10 +11,10 @@ sdk.login()
 # 建立委託物件
 order = OrderObject(
     buy_sell = Action.Buy,
-    price_flag = PriceFlag.LimitDown,
-    price = None,
-    stock_no = "2884",
-    quantity = 2,
-    ap_code = APCode.Common
+    price_flag = PriceFlag.Limit,
+    price = 946,
+    stock_no = "2330",
+    quantity = 50,
+    ap_code = APCode.IntradayOdd
 )
 sdk.place_order(order)
