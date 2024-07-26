@@ -13,9 +13,9 @@ order = OrderObject(
     buy_sell = Action.Buy,
     price_flag = PriceFlag.Limit,
     bs_flag = BSFlag.ROD,
-    price = 927,
-    stock_no = "2330",
-    quantity = 60,
+    price = 1200,
+    stock_no = "2454",
+    quantity = 40,
     ap_code = APCode.IntradayOdd
 )
 res = sdk.place_order(order)
