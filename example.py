@@ -18,4 +18,5 @@ order = OrderObject(
     quantity = 60,
     ap_code = APCode.IntradayOdd
 )
-sdk.place_order(order)
+res = sdk.place_order(order)
+print(res)
