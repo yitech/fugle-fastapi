@@ -11,8 +11,9 @@ sdk.login()
 # 建立委託物件
 order = OrderObject(
     buy_sell = Action.Buy,
-    price_flag = PriceFlag.Market,
-    price = None,
+    price_flag = PriceFlag.Limit,
+    bs_flag = BSFlag.ROD,
+    price = 927,
     stock_no = "2330",
     quantity = 60,
     ap_code = APCode.IntradayOdd
