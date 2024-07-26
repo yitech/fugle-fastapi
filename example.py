@@ -12,7 +12,7 @@ sdk.login()
 order = OrderObject(
     buy_sell = Action.Buy,
     price_flag = PriceFlag.Market,
-    # price = 2330,
+    price = 920,
     stock_no = "2330",
     quantity = 60,
     ap_code = APCode.IntradayOdd
