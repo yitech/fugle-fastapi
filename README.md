@@ -17,7 +17,18 @@ Uvicorn
 ## Installation
 Run in docker:
 
+### Build an image
 ```bash
 docker build -t fugle-fastapi:latest .
-docker run fugle-fastapi:latest .
+```
+
+### Generate Keyring pass
+This is the way fugle manage the credentials, only need to run once to get the cryptfile_pass.cfg
+```bash
+docker run -it --rm -v $(pwd)/credentials:/root/.local/share/python_keyring fugle-fastapi:latest python index.py
+```
+
+### Host a server
+```bash
+docker run -p 8000:8000 -d -v $(pwd)/credentials/cryptfile_pass.cfg:/root/.local/share/python_keyring/cryptfile_pass.cfg:ro --rm fugle-fastapi:latest
 ```

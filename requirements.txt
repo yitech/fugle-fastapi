@@ -1,4 +1,5 @@
 fastapi
+pydantic-settings
 fugle-trade
 uvicorn
 fugle-marketdata

@@ -3,7 +3,10 @@ import time
 from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
+from fugle_trade.order import OrderObject
 from app.core.config import settings
+
+FUGLE_TRADE_CONFIG = settings.fugle_trade_config
 
 class TraderSingleton:
     _instance = None
@@ -17,7 +20,7 @@ class TraderSingleton:
 
     def _initialize(self):
         self.config = ConfigParser()
-        self.config.read(settings.config_file)
+        self.config.read(FUGLE_TRADE_CONFIG)
         self.trader = SDK(self.config)
         self.trader.login()
 
@@ -39,15 +42,12 @@ class TraderSingleton:
             time.sleep(1)
 
     def get_trader(self):
-        return self.trader
+        return self
+    
+    def place_order(self, order: OrderObject):
+        return self.trader.place_order(order)
 
 # Function to get the trader instance
 def get_trader():
     return TraderSingleton().get_trader()
 
-# Example usage
-if __name__ == "__main__":
-    trader = get_trader()
-    # Keep the main thread alive to allow the scheduler to run
-    while True:
-        time.sleep(10)
