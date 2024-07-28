@@ -45,9 +45,3 @@ class TraderSingleton:
 def get_trader():
     return TraderSingleton().get_trader()
 
-# Example usage
-if __name__ == "__main__":
-    trader = get_trader()
-    # Keep the main thread alive to allow the scheduler to run
-    while True:
-        time.sleep(10)
