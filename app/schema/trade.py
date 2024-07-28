@@ -1,6 +1,5 @@
 from pydantic import BaseModel, Field, field_validator
 from fugle_trade.constant import (APCode, Trade, PriceFlag, BSFlag, Action)
-from typing import List, Optional
 
 class CreateOrder(BaseModel):
     buy_sell: Action
@@ -10,13 +9,13 @@ class CreateOrder(BaseModel):
     stock_no: str
     quantity: int = Field(..., gt=0)
     price: float = Field(..., gt=0)
-"""
+
     @field_validator('stock_no')
     def stock_no_must_be_str(cls, v):
         if not isinstance(v, str):
             raise TypeError("stock_no must be a string")
         return v
-
+"""
     @field_validator('quantity')
     def validate_quantity(cls, v, values):
         ap_code = values.get('ap_code')
