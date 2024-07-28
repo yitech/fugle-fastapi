@@ -2,3 +2,4 @@ fastapi
 fugle-trade
 uvicorn
 fugle-marketdata
+schedule
