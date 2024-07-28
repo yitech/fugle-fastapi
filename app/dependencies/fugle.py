@@ -3,6 +3,7 @@ import time
 from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
+from fugle_trade.order import OrderObject
 from app.core.config import settings
 
 class TraderSingleton:
@@ -39,7 +40,10 @@ class TraderSingleton:
             time.sleep(1)
 
     def get_trader(self):
-        return self.trader
+        return self
+    
+    def send_order(self, order: OrderObject):
+        self.trader.place_order(order)
 
 # Function to get the trader instance
 def get_trader():

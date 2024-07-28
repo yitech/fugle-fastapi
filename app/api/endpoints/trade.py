@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
-from app.schema.trade import CreateOrder
+from app.schema import CreateOrder
 from app.dependencies import get_trader
+from app.crud.trade import create_order
 
 
 router = APIRouter()
@@ -10,5 +11,5 @@ async def create_order(
     order: CreateOrder,
     trader = Depends(get_trader)
 ):
+    return create_order(trader, order)
 
-    return [{"item_id": "item1"}, {"item_id": "item2"}]
