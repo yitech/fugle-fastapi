@@ -1,11 +1,11 @@
 from fastapi import FastAPI
+from app.api.endpoints import trade
 
 app = FastAPI()
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+app.include_router(trade.router, prefix="/v1/trade", tags=["trade"])
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+@app.get("/v1/ping")
+async def ping():
+    return {"result": "pong"}
+
