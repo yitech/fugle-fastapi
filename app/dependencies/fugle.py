@@ -6,6 +6,8 @@ from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
 from app.core.config import settings
 
+FUGLE_TRADE_CONFIG = settings.fugle_trade_config
+
 class TraderSingleton:
     _instance = None
 
@@ -18,7 +20,7 @@ class TraderSingleton:
 
     def _initialize(self):
         self.config = ConfigParser()
-        self.config.read(settings.config_file)
+        self.config.read(FUGLE_TRADE_CONFIG)
         self.trader = SDK(self.config)
         self.trader.login()
 
@@ -42,8 +44,8 @@ class TraderSingleton:
     def get_trader(self):
         return self
     
-    def send_order(self, order: OrderObject):
-        self.trader.place_order(order)
+    def place_order(self, order: OrderObject):
+        return self.trader.place_order(order)
 
 # Function to get the trader instance
 def get_trader():
