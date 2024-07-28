@@ -19,5 +19,5 @@ Run in docker:
 
 ```bash
 docker build -t fugle-fastapi:latest .
-docker run fugle-fastapi:latest .
+docker run -p 8000:8000 -d --rm fugle-fastapi:latest
 ```

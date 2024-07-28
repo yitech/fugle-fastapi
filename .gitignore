@@ -3,4 +3,5 @@ config.ini
 *.p12
 .env
 .idea
+*.cfg
 __pycache__
