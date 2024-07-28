@@ -3,6 +3,7 @@ import time
 from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
+from app.core.config import settings
 
 class TraderSingleton:
     _instance = None
@@ -16,7 +17,7 @@ class TraderSingleton:
 
     def _initialize(self):
         self.config = ConfigParser()
-        self.config.read('./config.ini')
+        self.config.read(settings.config_file)
         self.trader = SDK(self.config)
         self.trader.login()
 
