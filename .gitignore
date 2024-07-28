@@ -2,3 +2,4 @@ venv
 config.ini
 *.p12
 .env
+.idea
