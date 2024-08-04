@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.api.v1 import order
 from app.dependencies.fugle import TraderSingleton
+from app.middleware.auth import middleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -11,7 +12,8 @@ async def lifespan(app: FastAPI):
     yield
     # trader_singleton.trader.disconnect_websocket()
     
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan,
+              middleware=middleware)
 
 app.include_router(order.router, prefix="/api/v1", tags=["Order"])
 

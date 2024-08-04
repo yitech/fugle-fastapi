@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.order import CreateOrder, OrderResponse, CancelOrder
+from app.schema.order import CreateOrder, OrderResponse, CancelOrder, OrderResult
 from app.dependencies import get_trader
 from app.crud.order import create_order, get_order_results
 
@@ -17,7 +17,7 @@ def create_order_endpoint(
         return HTTPException(status_code=501, detail=str(e))
     return res
 
-@router.get("/orders")
+@router.get("/orders", response_model=list[OrderResult])
 def get_orders_endpoint(
     trader = Depends(get_trader)
 ):

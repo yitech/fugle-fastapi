@@ -99,16 +99,27 @@ class TraderSingleton:
         websocket_thread.start()
 
     def on_order(self, ack: NotifyAck):
-        if ack.cel_type == '0':  # Cannot cancel, remove from orders
-            del self.orders[ack.ord_id]
-        elif ack.cel_type == '1':
-            ack_update = ack.model_dump()
-            ack_update.update({'org_share_qty': ack.org_qty_share,
-                               'mat_share_qty': ack.mat_qty_share,
-                               'cel_share_qty': ack.cel_qty_share})
-            self.orders[ack.ord_id].update(ack_update)
-        else:
-            raise ValueError(f"Cannot handle ack type {ack.cel_type}")
+        try:
+            if ack.cel_type == '2':  # Cannot cancel, remove from orders
+                del self.orders[ack.ord_id]
+            elif ack.cel_type == '1':
+                ack_update = ack.model_dump()
+                ack_update.update({'org_qty_share': int(ack.org_qty * 1000),
+                                   'mat_qty_share': int(ack.mat_qty * 1000),
+                                   'cel_qty_share': int(ack.cel_qty * 1000)})
+                if ack.ord_id in self.orders:
+                    self.orders[ack.ord_id].update(ack_update)
+                else:
+                    ack_update.update({'avg_price': 0.0,
+                                       'celable': '1',
+                                       'ord_date': ack.work_date,
+                                       'ord_time': ack.ret_time})
+                    self.orders[ack.ord_id] = OrderResult(**ack_update)
+            else:
+                print(f"Cannot handle ack type {ack.cel_type}")
+                raise ValueError(f"Cannot handle ack type {ack.cel_type}")
+        except Exception as e:
+            print(f"An exception occurred: {e}")
 
     def on_dealt(self, data):
         print(data)
