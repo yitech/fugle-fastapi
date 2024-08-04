@@ -1,4 +1,4 @@
-# Taiwan Stock Algorithmic Trading Service
+# Fugle Fast API
 This project is a service for algorithmic trading of Taiwan stocks. It leverages the Fugle Python API library and FastAPI to provide a robust and efficient trading services.
 
 # Features(In Progress)
