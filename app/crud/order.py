@@ -1,5 +1,5 @@
 from app.dependencies.fugle import TraderSingleton
-from app.schema.trade import CreateOrder
+from app.schema.order import CreateOrder
 from fugle_trade.order import OrderObject
 
 

@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from app.api.v1 import trade
+from app.api.v1 import order
 
 app = FastAPI()
 
-app.include_router(trade.router, prefix="/api/v1/trade", tags=["Trade"])
+app.include_router(order.router, prefix="/api/v1", tags=["Order"])
 
 @app.get("/api/v1/ping", tags=["System"])
 def ping():
