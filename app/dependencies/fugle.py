@@ -4,7 +4,7 @@ from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
-from app.models.fugle import NotifyAck
+from app.models.fugle import OrderResult, NotifyAck
 from app.core.config import settings
 
 FUGLE_TRADE_CONFIG = settings.fugle_trade_config
@@ -25,7 +25,7 @@ class TraderSingleton:
         self.trader = SDK(self.config)
         self.trader.login()
 
-        self.orders = {}
+        self.orders: dict[str, OrderResult] = self._get_order_results()
         self._connect_websocket() 
 
     def _login(self):
@@ -59,6 +59,15 @@ class TraderSingleton:
             "stock_no": stock_no
         }
         return self.trader.cancel_order(order_result)
+    
+    def _get_order_results(self):
+        order_results = self.trader.get_order_results()
+        res : dict[str, OrderResult] = {}
+        for result in filter(lambda res: res["celable"] == "1", order_results):
+            print(result)
+            res[result["ord_no"]] = OrderResult(**result)
+        print(len(res))
+        return res
     
     def _connect_websocket(self):
         @self.trader.on("order")

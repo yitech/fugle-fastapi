@@ -1,24 +1,24 @@
 from pydantic import BaseModel
 from fugle_trade.constant import (APCode, Trade, PriceFlag, BSFlag, Action)
 
-class OrderModel(BaseModel):
+class OrderResult(BaseModel):
     ap_code: APCode
     avg_price: float
     bs_flag: BSFlag
     buy_sell: Action
-    cel_qty: int
+    cel_qty: float
     cel_qty_share: int
     celable: str
     err_code: str
     err_msg: str
-    mat_qty: int
+    mat_qty: float
     mat_qty_share: int
     od_price: float
     ord_date: str
     ord_no: str
     ord_status: str
     ord_time: str
-    org_qty: int
+    org_qty: float
     org_qty_share: int
     pre_ord_no: str
     price_flag: PriceFlag
@@ -36,18 +36,18 @@ class NotifyAck(BaseModel):
     ord_no: str
     pre_ord_no: str
     stock_no: str
-    ap_code: str
-    buy_sell: str
-    trade: str
-    price_flag: str
+    ap_code: APCode
+    buy_sell: Action
+    trade: Trade
+    price_flag: PriceFlag
     od_price: float
-    org_qty: int
-    mat_qty: int
-    cel_qty: int
+    org_qty: float
+    mat_qty: float
+    cel_qty: float
     cel_type: str
     err_code: str
     err_msg: str
     action: str
-    before_qty: int
-    after_qty: int
-    bs_flag: str
+    before_qty: float
+    after_qty: float
+    bs_flag: BSFlag
