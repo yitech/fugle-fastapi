@@ -35,4 +35,4 @@ docker run -p 8000:8000 -d -v $(pwd)/credentials/cryptfile_pass.cfg:/root/.local
 
 # Self Host API
 You can see the API progress in
-[Swagger Docs](https://fugle.lynkora.com)
+[Swagger Docs](https://fugle.lynkora.com/docs)
