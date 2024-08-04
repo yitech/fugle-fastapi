@@ -1,11 +1,12 @@
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
-from fugle_trade.constant import (APCode, PriceFlag, BSFlag, Action)
+from fugle_trade.constant import (APCode, Trade, PriceFlag, BSFlag, Action)
 
 class CreateOrder(BaseModel):
     buy_sell: Action
     ap_code: APCode
     price_flag: PriceFlag
     bs_flag: BSFlag
+    trade: Trade
     stock_no: str
     quantity: int = Field(..., gt=0)
     price: float = Field(..., gt=0)
@@ -34,3 +35,8 @@ class OrderResponse(BaseModel):
     ret_code: str
     ret_msg: str
     work_date: str
+    
+class CancelOrder(BaseModel):
+    ap_code: str
+    ord_no: str
+    stock_no: str

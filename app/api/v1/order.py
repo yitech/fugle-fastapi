@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.order import CreateOrder, OrderResponse
+from app.schema.order import CreateOrder, OrderResponse, CancelOrder
 from app.dependencies import get_trader
 from app.crud.order import create_order
 
@@ -17,7 +17,14 @@ def create_order_endpoint(
         return HTTPException(status_code=501, detail=str(e))
     return res
 
-@router.delete("/order/{:id}")
-def delete_order_endpoint():
-    pass
+@router.delete("/order")
+def delete_order_endpoint(
+    order: CancelOrder,
+    trader = Depends(get_trader)
+):
+    try:
+        res = trader.cancel_order(order.ap_code, order.ord_no, order.stock_no)
+    except ValueError as e:
+        return HTTPException(status_code=501, detail=str(e))
+    return res
 

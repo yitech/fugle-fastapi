@@ -9,6 +9,7 @@ def create_order(trader: TraderSingleton, order: CreateOrder):
         buy_sell=order.buy_sell,
         price_flag=order.price_flag,
         bs_flag=order.bs_flag,
+        trade=order.trade,
         price=order.price,
         stock_no=order.stock_no,
         quantity=order.quantity
