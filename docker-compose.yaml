@@ -4,7 +4,7 @@ services:
     container_name: traefik
     restart: unless-stopped
     ports:
-      - "80:80"   # HTTP
+      - "80:80" # HTTP
       - "443:443" # HTTPS
       - "8080:8080" # Traefik Dashboard
     command:
@@ -27,7 +27,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHON_KEYRING_BACKEND=keyrings.cryptfile.cryptfile.CryptFileKeyring
     image: fugle-fastapi
+    volumes:
+      - ./credentials/cryptfile_pass.cfg:/root/.local/share/python_keyring/cryptfile_pass.cfg:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fugle-fastapi.rule=Host(`${DOMAIN_NAME}`)"
