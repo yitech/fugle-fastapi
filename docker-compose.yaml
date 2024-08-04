@@ -1,0 +1,41 @@
+services:
+  traefik:
+    image: traefik:v2.9
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"   # HTTP
+      - "443:443" # HTTPS
+      - "8080:8080" # Traefik Dashboard
+    command:
+      - "--api.insecure=true" # Enable Traefik dashboard (accessible via http://yourdomain:8080)
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false" # Don't expose all containers automatically
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=${EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    networks:
+      - lynk
+
+  fugle-fastapi:
+    container_name: fugle-fastapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fugle-fastapi
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fugle-fastapi.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.fugle-fastapi.entrypoints=websecure"
+      - "traefik.http.routers.fugle-fastapi.tls.certresolver=myresolver"
+    networks:
+      - lynk
+
+networks:
+  lynk:
+    external: true

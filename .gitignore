@@ -4,4 +4,5 @@ config.ini
 .env
 .idea
 *.cfg
+letsencrypt
 __pycache__
