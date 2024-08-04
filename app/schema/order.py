@@ -40,3 +40,29 @@ class CancelOrder(BaseModel):
     ap_code: str
     ord_no: str
     stock_no: str
+    
+class OrderResult(BaseModel):
+    ap_code: APCode
+    avg_price: float
+    bs_flag: BSFlag
+    buy_sell: Action
+    cel_qty: float
+    cel_qty_share: int
+    celable: str
+    err_code: str
+    err_msg: str
+    mat_qty: float
+    mat_qty_share: int
+    od_price: float
+    ord_date: str
+    ord_no: str
+    ord_status: str
+    ord_time: str
+    org_qty: float
+    org_qty_share: int
+    pre_ord_no: str
+    price_flag: PriceFlag
+    stock_no: str
+    trade: Trade
+    work_date: str
+    user_def: str = ''

@@ -51,6 +51,7 @@ class TraderSingleton:
     
     def place_order(self, order: OrderObject):
         return self.trader.place_order(order)
+            
     
     def cancel_order(self, ap_code, ord_no, stock_no):
         order_result = {
@@ -60,13 +61,24 @@ class TraderSingleton:
         }
         return self.trader.cancel_order(order_result)
     
+    def get_order_results(self):
+        return list(self.orders.values())
+    
     def _get_order_results(self):
-        order_results = self.trader.get_order_results()
+        try:
+            order_results = self.trader.get_order_results()
+        except ValueError as e:
+            raise ValueError(str(e))
+        except Exception as e:
+            raise Exception(str(e))
+        
         res : dict[str, OrderResult] = {}
         for result in filter(lambda res: res["celable"] == "1", order_results):
-            print(result)
-            res[result["ord_no"]] = OrderResult(**result)
-        print(len(res))
+            order_result = OrderResult(**result)
+            if order_result.ord_id == '':
+                print("Error: Could not find order number")
+            else:
+                res[order_result.ord_id] = order_result
         return res
     
     def _connect_websocket(self):
@@ -87,7 +99,16 @@ class TraderSingleton:
         websocket_thread.start()
 
     def on_order(self, ack: NotifyAck):
-        print(ack)
+        if ack.cel_type == '0':  # Cannot cancel, remove from orders
+            del self.orders[ack.ord_id]
+        elif ack.cel_type == '1':
+            ack_update = ack.model_dump()
+            ack_update.update({'org_share_qty': ack.org_qty_share,
+                               'mat_share_qty': ack.mat_qty_share,
+                               'cel_share_qty': ack.cel_qty_share})
+            self.orders[ack.ord_id].update(ack_update)
+        else:
+            raise ValueError(f"Cannot handle ack type {ack.cel_type}")
 
     def on_dealt(self, data):
         print(data)
