@@ -13,6 +13,5 @@ def create_order(trader: TraderSingleton, order: CreateOrder):
         stock_no=order.stock_no,
         quantity=order.quantity
     )
-    
     res = trader.place_order(order)
     return res
