@@ -12,6 +12,5 @@ def create_order_endpoint(
     trader = Depends(get_trader)
 ):
     res = create_order(trader, order)
-    print(res)
     return res
 
