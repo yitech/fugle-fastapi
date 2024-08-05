@@ -6,9 +6,8 @@ services:
     ports:
       - "80:80" # HTTP
       - "443:443" # HTTPS
-      - "8080:8080" # Traefik Dashboard
     command:
-      - "--api.insecure=true" # Enable Traefik dashboard (accessible via http://yourdomain:8080)
+      - "--api.dashboard=true" # Enable Traefik dashboard
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false" # Don't expose all containers automatically
       - "--entrypoints.web.address=:80"
@@ -21,6 +20,12 @@ services:
       - "./letsencrypt:/letsencrypt"
     networks:
       - lynk
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      - "traefik.http.routers.traefik-dashboard.tls.certresolver=myresolver"
 
   fugle-fastapi:
     container_name: fugle-fastapi
@@ -35,7 +40,7 @@ services:
       - ./credentials/cryptfile_pass.cfg:/root/.local/share/python_keyring/cryptfile_pass.cfg:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fugle-fastapi.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.fugle-fastapi.rule=Host(`fugle.${DOMAIN_NAME}`)"
       - "traefik.http.routers.fugle-fastapi.entrypoints=websecure"
       - "traefik.http.routers.fugle-fastapi.tls.certresolver=myresolver"
     networks:
