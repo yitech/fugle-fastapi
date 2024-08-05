@@ -6,3 +6,4 @@ config.ini
 *.cfg
 letsencrypt
 __pycache__
+authelia
