@@ -50,7 +50,7 @@ services:
     image: authelia/authelia
     container_name: authelia
     volumes:
-      - ./config:/config
+      - ./config:/app/config
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.authelia.rule=Host(`auth.${DOMAIN}`)'
@@ -65,6 +65,8 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Asia/Taipei
+    networks:
+      - lynk
 
 networks:
   lynk:
