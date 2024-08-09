@@ -11,8 +11,14 @@ This project is a service for algorithmic trading of Taiwan stocks. It leverages
 ## Prerequisites
 - Python 3.10
 - Fugle's Trading credentials/Marketdata API Key
+
+### Rename you p12 credential
+```bash
+mv filename.p12 cert.p12
+```
 - FastAPI
 - Uvicorn
+
 
 ## Installation
 Run in docker:
@@ -25,12 +31,22 @@ docker build -t fugle-fastapi:latest .
 ### Generate Keyring pass
 This is the way fugle manage the credentials, only need to run once to get the cryptfile_pass.cfg
 ```bash
-docker run -it --rm -v $(pwd)/credentials:/root/.local/share/python_keyring fugle-fastapi:latest python index.py
+docker run -it --rm \
+    -v $(pwd)/credentials:/root/.local/share/python_keyring \
+    -v $(pwd)/config.ini:/app/config.ini:ro \
+    -v $(pwd)/cert.p12:/app/cert.p12 \
+    -v $(pwd)/.env:/app/.env:ro \
+    fugle-fastapi:latest python index.py
 ```
 
 ### Host a server
 ```bash
-docker run -p 8000:8000 -d -v $(pwd)/credentials/cryptfile_pass.cfg:/root/.local/share/python_keyring/cryptfile_pass.cfg:ro --rm fugle-fastapi:latest
+docker run -p 8000:8000 --rm -d \
+    -v $(pwd)/credentials/cryptfile_pass.cfg:/root/.local/share/python_keyring/cryptfile_pass.cfg:ro \
+    -v $(pwd)/config.ini:/app/config.ini:ro \
+    -v $(pwd)/cert.p12:/app/cert.p12 \
+    -v $(pwd)/.env:/app/.env:ro \
+    fugle-fastapi:latest
 ```
 
 # Self Host API
