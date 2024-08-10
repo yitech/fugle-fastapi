@@ -1,3 +1,5 @@
+from typing import Dict
+from enum import Enum
 from pydantic import BaseModel, field_validator, ValidationInfo
 from fugle_trade.constant import (APCode, Trade, PriceFlag, BSFlag, Action)
 
@@ -42,6 +44,14 @@ class OrderResult(BaseModel):
         for key, value in data.items():
             setattr(self, key, value)
         return self
+    
+    def model_dump(self) -> Dict:
+        # Convert the model to a dictionary and manually convert enums
+        result = super().model_dump()
+        for key, value in result.items():
+            if isinstance(value, Enum):
+                result[key] = value.value
+        return result
 
 
 class NotifyAck(BaseModel):

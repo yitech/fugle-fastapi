@@ -27,13 +27,13 @@ def get_orders_endpoint(
         return HTTPException(status_code=501, detail=str(e))
     return res
 
-@router.delete("/order")
+@router.delete("/order/{ord_no}")
 def delete_order_endpoint(
-    order: CancelOrder,
+    ord_no: str,
     trader = Depends(get_trader)
 ):
     try:
-        res = trader.cancel_order(order.ap_code, order.ord_no, order.stock_no)
+        res = trader.cancel_order(ord_no)
     except ValueError as e:
         return HTTPException(status_code=501, detail=str(e))
     return res

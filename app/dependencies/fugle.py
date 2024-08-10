@@ -53,13 +53,12 @@ class TraderSingleton:
         return self.trader.place_order(order)
             
     
-    def cancel_order(self, ap_code, ord_no, stock_no):
-        order_result = {
-            "ap_code": ap_code,
-            "ord_no": ord_no,
-            "stock_no": stock_no
-        }
-        return self.trader.cancel_order(order_result)
+    def cancel_order(self, ord_no: str):
+        if ord_no not in self.orders:
+            raise ValueError(f"Order number {ord_no} not found")
+        order_result = self.orders[ord_no]
+        print(f"Cancelling order {order_result}")
+        return self.trader.cancel_order(order_result.model_dump())
     
     def get_order_results(self):
         return list(self.orders.values())
