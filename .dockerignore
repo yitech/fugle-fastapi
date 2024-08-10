@@ -4,3 +4,5 @@ __pycache__
 .env
 .gitignore
 *.p12
+.vscode
+*.pyc
