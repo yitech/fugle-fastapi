@@ -1,6 +1,6 @@
 fastapi
 pydantic-settings
-fugle-core>=2.1.0
+fugle-trade-core>=2.1.0
 fugle-trade>=1.2.0
 uvicorn
 fugle-marketdata>=2.2.0
