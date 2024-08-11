@@ -20,7 +20,7 @@
             "level": "INFO",
             "class": "logging.handlers.TimedRotatingFileHandler",
             "formatter": "json",
-            "filename": "log/fugle-fastapi.log",
+            "filename": "logs/fugle-fastapi.log",
             "when": "midnight",
             "backupCount": 10,
             "encoding": "utf-8",

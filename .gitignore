@@ -6,4 +6,4 @@ config.ini
 *.cfg
 __pycache__
 .vscode
-log
+logs
