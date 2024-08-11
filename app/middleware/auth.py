@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import Request
 from fastapi.middleware import Middleware
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -16,18 +17,15 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if any(request.url.path.startswith(path) for path in self.protected_paths):
             auth_header = request.headers.get("Authorization")
 
-            if not auth_header or not self.is_valid_token(auth_header):
+            if not self.is_valid_token(auth_header):
                 return JSONResponse(content={"error": "Unauthorized"}, status_code=401)
 
         # Continue processing the request if authenticated
         response = await call_next(request)
         return response
 
-    def is_valid_token(self, token: str) -> bool:
-        # Implement your token validation logic here
-        if settings.api_secret is None:
-            return True
-        return token == settings.api_secret
+    def is_valid_token(self, token: Optional[str]) -> bool:
+        return settings.api_secret is None or token == settings.api_secret
 
 
 middleware = [Middleware(AuthMiddleware, protected_paths=["/api"])]

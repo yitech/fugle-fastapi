@@ -5,5 +5,4 @@ config.ini
 .idea
 *.cfg
 __pycache__
-.vscode
 logs
