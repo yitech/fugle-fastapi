@@ -10,6 +10,9 @@ import logging
 
 FUGLE_TRADE_CONFIG = settings.fugle_trade_config
 
+# Create a logger for your application
+logger = logging.getLogger("fugle")
+
 class TraderSingleton:
     _instance = None
 
@@ -24,13 +27,14 @@ class TraderSingleton:
         self.config = ConfigParser()
         self.config.read(FUGLE_TRADE_CONFIG)
         self.trader = SDK(self.config)
+        logger.info("Login in...")
         self.trader.login()
-
+        logger.info("Login success")
         self.orders: dict[str, OrderResult] = self._get_order_results()
         self._connect_websocket() 
 
     def _login(self):
-        print("Logging in again...")
+        logger.info("Login in again...")
         self.trader.login()
 
     def _start_scheduler(self):
@@ -86,16 +90,18 @@ class TraderSingleton:
         @self.trader.on("order")
         def on_order(data: dict):
             ack = NotifyAck(**data)
-            logging.info(f"On NotifyAck: {ack}")
+            logger.info(f"On NotifyAck: {ack}")
             self.on_order(ack)
 
         @self.trader.on("dealt")
         def on_dealt(data):
             self.on_dealt(data)
+            logger.info(f"On Dealt: {data}")
 
         @self.trader.on("error")
         def on_error(data):
             self.on_error(data)
+            logger.info(f"On Error: {data}")
 
         websocket_thread = Thread(target=self.trader.connect_websocket, daemon=True)
         websocket_thread.start()
@@ -118,16 +124,16 @@ class TraderSingleton:
                                        'ord_time': ack.ret_time})
                     self.orders[ack.ord_id] = OrderResult(**ack_update)
             else:
-                print(f"Cannot handle ack type {ack.cel_type}")
+                logger.error(f"Cannot handle ack type {ack.cel_type}")
                 raise ValueError(f"Cannot handle ack type {ack.cel_type}")
         except Exception as e:
             print(f"An exception occurred: {e}")
 
     def on_dealt(self, data):
-        print(data)
+        pass
 
     def on_error(self, data):
-        print(data)
+        pass
     
     
 

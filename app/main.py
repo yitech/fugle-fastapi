@@ -23,10 +23,11 @@ logger = logging.getLogger("fugle")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Logging the start of the application
-    logger.info("This is an info message.")
+    logger.info("Start up the application")
     TraderSingleton()
     yield
     # trader_singleton.trader.disconnect_websocket()
+    logger.info("Shutting down the application")
 
     
 app = FastAPI(lifespan=lifespan,
