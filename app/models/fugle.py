@@ -99,16 +99,18 @@ class NotifyAck(BaseModel):
             raise ValueError("share should not be provided")
         return int(info.data['org_qty'] * 1000)
 
+
     @field_validator('mat_qty_share')
     def validate_mat_qty_share(cls, v: Optional[int], info: ValidationInfo):
         if v:
             raise ValueError("share should not be provided")
         return int(info.data['mat_qty'] * 1000)
-    
+
+
     @field_validator('cel_qty_share')
     def validate_cel_qty_share(cls, v: Optional[int], info: ValidationInfo):
         if v:
             raise ValueError("share should not be provided")
         return int(info.data['cel_qty'] * 1000)
-    
+
 """
