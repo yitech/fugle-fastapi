@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic_settings import BaseSettings
 
+
 class Settings(BaseSettings):
     app_name: str = "Fugle FastAPI"
     fugle_market_api_key: str
@@ -12,4 +13,5 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-settings = Settings()
+
+settings = Settings()  # type: ignore

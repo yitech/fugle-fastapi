@@ -52,3 +52,31 @@ docker run -p 8000:8000 --rm -d \
 # Self Host API
 You can see the API progress in
 [Swagger Docs](https://fugle.lynxlinkage.com/docs)
+
+
+# For developer
+You can always use flake8 to make sure the coding quality
+
+## Installation
+```
+pip install flake8 autopep8 black mypy
+```
+
+## Linting
+```bash
+flake8 app
+```
+
+Tools for auto reformatting:
+```bash
+autopep8 --select=W293 --in-place app/models/fugle.py
+```
+
+```bash
+black app
+```
+
+## Type Checking
+```bash
+mypy --ignore-missing-imports --check-untyped-defs app
+```
