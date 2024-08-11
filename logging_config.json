@@ -1,0 +1,53 @@
+{
+    "version": 1,
+    "disable_existing_loggers": false,
+    "formatters": {
+        "default": {
+            "format": "[%(levelname)s] [%(asctime)s] [%(filename)s:%(lineno)d] %(message)s"
+        },
+        "json": {
+            "format": "{\"level\": \"%(levelname)s\", \"time\": \"%(asctime)s\", \"filename\": \"%(filename)s\", \"lineno\": \"%(lineno)d\", \"message\": \"%(message)s\"}"
+        }
+    },
+    "handlers": {
+        "default": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
+            "stream": "ext://sys.stdout"
+        },
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "formatter": "json",
+            "filename": "log/fugle-fastapi.log",
+            "when": "midnight",
+            "backupCount": 10,
+            "encoding": "utf-8",
+            "delay": false,
+            "utc": false
+        }
+    },
+    "loggers": {
+        "fugle": {
+            "handlers": ["default", "file"],
+            "level": "INFO",
+            "propagate": false
+        },
+        "uvicorn": {
+            "handlers": ["default", "file"],
+            "level": "INFO",
+            "propagate": false
+        },
+        "uvicorn.error": {
+            "handlers": ["default", "file"],
+            "level": "INFO",
+            "propagate": false
+        },
+        "uvicorn.access": {
+            "handlers": ["default", "file"],
+            "level": "INFO",
+            "propagate": false
+        }
+    }
+}
