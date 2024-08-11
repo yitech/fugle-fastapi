@@ -13,6 +13,7 @@ FUGLE_TRADE_CONFIG = settings.fugle_trade_config
 # Create a logger for your application
 logger = logging.getLogger("fugle")
 
+
 class TraderSingleton:
     _instance = None
 
@@ -31,7 +32,7 @@ class TraderSingleton:
         self.trader.login()
         logger.info("Login success")
         self.orders: dict[str, OrderResult] = self._get_order_results()
-        self._connect_websocket() 
+        self._connect_websocket()
 
     def _login(self):
         logger.info("Login in again...")
@@ -44,7 +45,6 @@ class TraderSingleton:
         # Run the scheduler in a separate thread
         scheduler_thread = Thread(target=self._run_scheduler, daemon=True)
         scheduler_thread.start()
-        
 
     def _run_scheduler(self):
         while True:
@@ -53,11 +53,10 @@ class TraderSingleton:
 
     def get_trader(self):
         return self
-    
+
     def place_order(self, order: OrderObject):
         return self.trader.place_order(order)
-            
-    
+
     def cancel_order(self, ord_no: str):
         if ord_no not in self.orders:
             raise ValueError(f"Order number {ord_no} not found")
@@ -65,10 +64,10 @@ class TraderSingleton:
         logging.info(f"Cancelling order {order_result}")
         res = self.trader.cancel_order(order_result.model_dump_with_enum())
         logging.info(f"Order {res} cancelled")
-    
+
     def get_order_results(self):
         return list(self.orders.values())
-    
+
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:
             order_results = self.trader.get_order_results()
@@ -76,16 +75,16 @@ class TraderSingleton:
             raise ValueError(str(e))
         except Exception as e:
             raise Exception(str(e))
-        
-        res : dict[str, OrderResult] = {}
+
+        res: dict[str, OrderResult] = {}
         for result in filter(lambda res: res["celable"] == "1", order_results):
             order_result = OrderResult(**result)
-            if order_result.ord_id == '':
+            if order_result.ord_id == "":
                 print("Error: Could not find order number")
             else:
                 res[order_result.ord_id] = order_result
         return res
-    
+
     def _connect_websocket(self):
         @self.trader.on("order")
         def on_order(data: dict):
@@ -108,20 +107,28 @@ class TraderSingleton:
 
     def on_order(self, ack: NotifyAck):
         try:
-            if ack.cel_type == '2':  # Cannot cancel, remove from orders
+            if ack.cel_type == "2":  # Cannot cancel, remove from orders
                 del self.orders[ack.ord_id]
-            elif ack.cel_type == '1':
+            elif ack.cel_type == "1":
                 ack_update = ack.model_dump()
-                ack_update.update({'org_qty_share': int(ack.org_qty * 1000),
-                                   'mat_qty_share': int(ack.mat_qty * 1000),
-                                   'cel_qty_share': int(ack.cel_qty * 1000)})
+                ack_update.update(
+                    {
+                        "org_qty_share": int(ack.org_qty * 1000),
+                        "mat_qty_share": int(ack.mat_qty * 1000),
+                        "cel_qty_share": int(ack.cel_qty * 1000),
+                    }
+                )
                 if ack.ord_id in self.orders:
                     self.orders[ack.ord_id].update(ack_update)
                 else:
-                    ack_update.update({'avg_price': 0.0,
-                                       'celable': '1',
-                                       'ord_date': ack.work_date,
-                                       'ord_time': ack.ret_time})
+                    ack_update.update(
+                        {
+                            "avg_price": 0.0,
+                            "celable": "1",
+                            "ord_date": ack.work_date,
+                            "ord_time": ack.ret_time,
+                        }
+                    )
                     self.orders[ack.ord_id] = OrderResult(**ack_update)
             else:
                 logger.error(f"Cannot handle ack type {ack.cel_type}")
@@ -134,10 +141,8 @@ class TraderSingleton:
 
     def on_error(self, data):
         pass
-    
-    
+
 
 # Function to get the trader instance
 def get_trader():
     return TraderSingleton().get_trader()
-

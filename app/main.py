@@ -19,6 +19,7 @@ else:
 # Create a logger for your application
 logger = logging.getLogger("fugle")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Logging the start of the application
@@ -28,17 +29,12 @@ async def lifespan(app: FastAPI):
     # trader_singleton.trader.disconnect_websocket()
     logger.info("Shutting down the application")
 
-    
-app = FastAPI(lifespan=lifespan,
-              middleware=middleware)
+
+app = FastAPI(lifespan=lifespan, middleware=middleware)
 
 app.include_router(order.router, prefix="/api/v1", tags=["Order"])
+
 
 @app.get("/api/v1/ping", tags=["System"])
 def ping():
     return {"result": "pong"}
-
-
-
-
-

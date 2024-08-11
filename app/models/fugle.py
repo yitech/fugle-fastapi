@@ -1,7 +1,8 @@
 from typing import Dict, Any
 from enum import Enum
 from pydantic import BaseModel, field_validator, ValidationInfo
-from fugle_trade.constant import (APCode, Trade, PriceFlag, BSFlag, Action)
+from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
+
 
 class OrderResult(BaseModel):
     ap_code: APCode
@@ -27,24 +28,24 @@ class OrderResult(BaseModel):
     stock_no: str
     trade: Trade
     work_date: str
-    user_def: str = ''
-    
-    @field_validator('ord_no')
+    user_def: str = ""
+
+    @field_validator("ord_no")
     def validate_ord_no(cls, v: str, info: ValidationInfo):
-        pre_ord_no = info.data.get('pre_ord_no')
-        if v == '' and pre_ord_no == '':
+        pre_ord_no = info.data.get("pre_ord_no")
+        if v == "" and pre_ord_no == "":
             raise ValueError("ord_no cannot be empty")
         return v
-    
+
     @property
     def ord_id(self):
-        return self.ord_no if self.ord_no != '' else self.pre_ord_no
-    
+        return self.ord_no if self.ord_no != "" else self.pre_ord_no
+
     def update(self, data: dict):
         for key, value in data.items():
             setattr(self, key, value)
         return self
-    
+
     def model_dump_with_enum(self) -> Dict[str, Any]:
         # Convert the model to a dictionary and manually convert enums
         result = super().model_dump()
@@ -78,17 +79,19 @@ class NotifyAck(BaseModel):
     before_qty: float
     after_qty: float
     bs_flag: BSFlag
-    
-    @field_validator('ord_no')
+
+    @field_validator("ord_no")
     def validate_ord_no(cls, v: str, info: ValidationInfo):
-        pre_ord_no = info.data.get('pre_ord_no')
-        if v == '' and pre_ord_no == '':
+        pre_ord_no = info.data.get("pre_ord_no")
+        if v == "" and pre_ord_no == "":
             raise ValueError("ord_no cannot be empty")
         return v
-    
+
     @property
     def ord_id(self):
-        return self.ord_no if self.ord_no != '' else self.pre_ord_no
+        return self.ord_no if self.ord_no != "" else self.pre_ord_no
+
+
 """
     @field_validator('org_qty_share')
     def validate_org_qty_share(cls, v: Optional[int], info: ValidationInfo):
@@ -108,4 +111,4 @@ class NotifyAck(BaseModel):
             raise ValueError("share should not be provided")
         return int(info.data['cel_qty'] * 1000)
     
-""" 
+"""
