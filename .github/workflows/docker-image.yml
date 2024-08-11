@@ -48,6 +48,6 @@ jobs:
         context: .
         file: Dockerfile
         push: true
-        tags: yitech/fugle-fastapi:latest
+        tags: yitech/fugle-fastapi:${{ steps.docker_tag.outputs.tag }}
         platforms: linux/amd64
 
