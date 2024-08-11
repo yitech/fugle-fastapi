@@ -63,13 +63,13 @@ class TraderSingleton:
             raise ValueError(f"Order number {ord_no} not found")
         order_result = self.orders[ord_no]
         logging.info(f"Cancelling order {order_result}")
-        res = self.trader.cancel_order(order_result.model_dump())
+        res = self.trader.cancel_order(order_result.model_dump_with_enum())
         logging.info(f"Order {res} cancelled")
     
     def get_order_results(self):
         return list(self.orders.values())
     
-    def _get_order_results(self):
+    def _get_order_results(self) -> dict[str, OrderResult]:
         try:
             order_results = self.trader.get_order_results()
         except ValueError as e:
