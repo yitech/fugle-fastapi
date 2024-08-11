@@ -85,5 +85,5 @@ mypy --ignore-missing-imports --check-untyped-defs app
 
 ## Unittest
 ```bash
-pip install pytest httpx pytest-asyncio
+pip install pytest httpx pytest-asyncio pytest-cov
 ```
