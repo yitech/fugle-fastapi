@@ -64,6 +64,7 @@ pip install flake8 autopep8 black mypy
 
 ## Linting
 ```bash
+pip install flake8 autopep8 black
 flake8 app
 ```
 
@@ -78,5 +79,12 @@ black app
 
 ## Type Checking
 ```bash
+pip install mypy
 mypy --ignore-missing-imports --check-untyped-defs app
+```
+
+## Unittest
+```bash
+pip install pytest httpx pytest-asyncio pytest-cov
+pytest --cov=app --cov-report=html
 ```
