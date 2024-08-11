@@ -6,6 +6,7 @@ from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
 from app.models.fugle import OrderResult, NotifyAck
 from app.core.config import settings
+import logging
 
 FUGLE_TRADE_CONFIG = settings.fugle_trade_config
 
@@ -57,8 +58,9 @@ class TraderSingleton:
         if ord_no not in self.orders:
             raise ValueError(f"Order number {ord_no} not found")
         order_result = self.orders[ord_no]
-        print(f"Cancelling order {order_result}")
-        return self.trader.cancel_order(order_result.model_dump())
+        logging.info(f"Cancelling order {order_result}")
+        res = self.trader.cancel_order(order_result.model_dump())
+        logging.info(f"Order {res} cancelled")
     
     def get_order_results(self):
         return list(self.orders.values())
@@ -83,7 +85,8 @@ class TraderSingleton:
     def _connect_websocket(self):
         @self.trader.on("order")
         def on_order(data: dict):
-            ack = NotifyAck(**data) 
+            ack = NotifyAck(**data)
+            logging.info(f"On NotifyAck: {ack}")
             self.on_order(ack)
 
         @self.trader.on("dealt")
