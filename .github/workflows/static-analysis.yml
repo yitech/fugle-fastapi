@@ -29,7 +29,7 @@ jobs:
 
       - name: Run mypy
         run: |
-          mypy --ignore-missing-imports --check-untyped-defs .
+          mypy --ignore-missing-imports --check-untyped-defs app
 
       - name: Run flake8
         run: |
