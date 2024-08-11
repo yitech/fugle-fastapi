@@ -1,4 +1,7 @@
 # Fugle Fast API
+
+[![codecov](https://codecov.io/gh/yitech/fugle-fastapi/graph/badge.svg?token=ESEZZX1WSI)](https://codecov.io/gh/yitech/fugle-fastapi)
+
 This project is a service for algorithmic trading of Taiwan stocks. It leverages the Fugle Python API library and FastAPI to provide a robust and efficient trading services.
 
 # Features(In Progress)
