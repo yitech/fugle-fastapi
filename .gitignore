@@ -10,3 +10,4 @@ logs
 coverage.xml
 htmlcov
 .DS_Store
+.vscode
