@@ -1,14 +1,5 @@
-from fugle_marketdata import RestClient
-import json
-
-client = RestClient(api_key="ZjZjOTU1ZjctYjdlZC00OWUzLThiOGQtZjg1MDcwMThhYzBkIDU3NWNjOGQ1LWY3NGUtNDJmOS05MDdjLTRiOTViMjM1ZTIwZg==")
-stock = client.stock
-data = stock.intraday.quote(symbol="2337")
-print(json.dumps(data, indent=4))
-# print(stock.historical.candles(symbol="2330", resolution="D", limit=10))
-
+from typing import List
 from pydantic import BaseModel
-from typing import List, Optional
 from datetime import date
 
 class BidAsk(BaseModel):
@@ -71,5 +62,3 @@ class Quote(BaseModel):
     serial: int
     lastUpdated: int
 
-quote = Quote(**data)
-print(quote)

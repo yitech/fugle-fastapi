@@ -1,5 +1,6 @@
-from typing import List
 from pydantic import BaseModel
+from typing import List, Optional
+from datetime import date
 
 class BidAsk(BaseModel):
     price: float
@@ -30,8 +31,8 @@ class LastTrial(BaseModel):
     serial: int
 
 class Quote(BaseModel):
-    date: str
-    type_: str  # Changed 'type' to 'type_' to avoid conflict with the built-in `type`
+    date: date
+    type: str
     exchange: str
     market: str
     symbol: str
