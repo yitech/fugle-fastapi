@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y vim && rm -rf /var/lib/apt/lists/*
 # Copy the rest of the application code into the container at /app
 COPY . /app
 
+# Create a logs directory
+RUN mkdir -p ./logs
+
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
