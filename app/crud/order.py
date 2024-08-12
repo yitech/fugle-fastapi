@@ -1,5 +1,5 @@
 from app.dependencies.fugle import TraderSingleton
-from app.schema.order import CreateOrder, OrderResponse, OrderResult
+from app.schema.order import CreateOrder, OrderResponse, OrderResult, CancelResponse
 from fugle_trade.order import OrderObject
 
 
@@ -18,9 +18,13 @@ def create_order(trader: TraderSingleton, order: CreateOrder) -> OrderResponse:
     return OrderResponse(**order_response)
 
 
-def get_order_results(trader: TraderSingleton):
+def get_order_results(trader: TraderSingleton) -> list[OrderResult]:
     order_results = trader.get_order_results()
     results: list[OrderResult] = []
     for order in order_results:
         results.append(OrderResult(**order.model_dump()))
     return trader.get_order_results()
+
+def cancel_order(trader: TraderSingleton, ord_no: str) -> CancelResponse:
+    res = trader.cancel_order(ord_no)
+    return CancelResponse(**res.model_dump())

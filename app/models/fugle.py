@@ -92,25 +92,8 @@ class NotifyAck(BaseModel):
         return self.ord_no if self.ord_no != "" else self.pre_ord_no
 
 
-"""
-    @field_validator('org_qty_share')
-    def validate_org_qty_share(cls, v: Optional[int], info: ValidationInfo):
-        if v:
-            raise ValueError("share should not be provided")
-        return int(info.data['org_qty'] * 1000)
-
-
-    @field_validator('mat_qty_share')
-    def validate_mat_qty_share(cls, v: Optional[int], info: ValidationInfo):
-        if v:
-            raise ValueError("share should not be provided")
-        return int(info.data['mat_qty'] * 1000)
-
-
-    @field_validator('cel_qty_share')
-    def validate_cel_qty_share(cls, v: Optional[int], info: ValidationInfo):
-        if v:
-            raise ValueError("share should not be provided")
-        return int(info.data['cel_qty'] * 1000)
-
-"""
+class CancelResult(BaseModel):
+    ord_date: str
+    ord_time: str
+    ret_code: str
+    ret_msg: str

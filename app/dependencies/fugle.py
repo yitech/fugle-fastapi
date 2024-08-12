@@ -4,7 +4,7 @@ from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
-from app.models.fugle import OrderResult, NotifyAck
+from app.models.fugle import OrderResult, NotifyAck, CancelResult
 from app.core.config import settings
 import logging
 
@@ -55,15 +55,18 @@ class TraderSingleton:
         return self
 
     def place_order(self, order: OrderObject):
-        return self.trader.place_order(order)
+        res = self.trader.place_order(order)
+        logger.info(f"Order placed: {res}")
+        return res
 
-    def cancel_order(self, ord_no: str):
+    def cancel_order(self, ord_no: str) -> CancelResult:
         if ord_no not in self.orders:
             raise ValueError(f"Order number {ord_no} not found")
         order_result = self.orders[ord_no]
-        logging.info(f"Cancelling order {order_result}")
+        logger.info(f"Cancelling order {order_result}")
         res = self.trader.cancel_order(order_result.model_dump_with_enum())
-        logging.info(f"Order {res} cancelled")
+        logger.info(f"Order {res} cancelled")
+        return CancelResult(**res)
 
     def get_order_results(self):
         return list(self.orders.values())
@@ -80,7 +83,7 @@ class TraderSingleton:
         for result in filter(lambda res: res["celable"] == "1", order_results):
             order_result = OrderResult(**result)
             if order_result.ord_id == "":
-                print("Error: Could not find order number")
+                logger.error("Error: Could not find order number")
             else:
                 res[order_result.ord_id] = order_result
         return res
