@@ -7,6 +7,8 @@ config.ini
 __pycache__
 logs
 .coverage
+*.http
+*.rest
 coverage.xml
 htmlcov
 .DS_Store
