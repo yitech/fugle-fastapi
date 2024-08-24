@@ -40,10 +40,11 @@ class OrderResponse(BaseModel):
     work_date: str
 
 
-class CancelOrder(BaseModel):
-    ap_code: str
-    ord_no: str
-    stock_no: str
+class CancelResponse(BaseModel):
+    ret_code: str
+    ret_msg: str
+    ord_date: str
+    ord_time: str
 
 
 class OrderResult(BaseModel):
