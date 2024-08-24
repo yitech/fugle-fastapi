@@ -25,6 +25,7 @@ def get_order_results(trader: TraderSingleton) -> list[OrderResult]:
         results.append(OrderResult(**order.model_dump()))
     return trader.get_order_results()
 
+
 def cancel_order(trader: TraderSingleton, ord_no: str) -> CancelResponse:
     res = trader.cancel_order(ord_no)
     return CancelResponse(**res.model_dump())

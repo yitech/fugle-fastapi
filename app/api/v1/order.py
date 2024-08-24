@@ -26,7 +26,7 @@ def get_orders_endpoint(trader=Depends(get_trader)):
 
 
 @router.delete("/order/{ord_no}", response_model=CancelResponse)
-def delete_order_endpoint(ord_no: str, trader=Depends(get_trader))-> CancelResponse:
+def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)) -> CancelResponse:
     try:
         res = cancel_order(trader, ord_no)
     except ValueError as e:

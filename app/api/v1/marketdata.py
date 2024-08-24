@@ -1,19 +1,18 @@
 from typing import Literal, Optional
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.fuglemarket import (
-    QuoteResponse, 
-    KLinesResponse
-)
+from app.schema import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
-from app.crud.marketdata import (
-    get_intraday_quote,
-    get_historical_candles
-)
+from app.crud.marketdata import get_intraday_quote, get_historical_candles
 
 router = APIRouter()
 
+
 @router.get("/intraday/quote", response_model=QuoteResponse)
-def get_quote(symbol: str, type: Optional[Literal["oddlot", "EQUITY"]]="EQUITY", market=Depends(get_market)):
+def get_quote(
+    symbol: str,
+    type: Optional[Literal["oddlot", "EQUITY"]] = "EQUITY",
+    market=Depends(get_market),
+):
     try:
         res = get_intraday_quote(market, symbol, type)
     except ValueError as e:
@@ -22,7 +21,13 @@ def get_quote(symbol: str, type: Optional[Literal["oddlot", "EQUITY"]]="EQUITY",
 
 
 @router.get("/historical/candles", response_model=KLinesResponse)
-def get_candles(symbol: str, from_date: str, to_date: str, resolution: Optional[str]="D", market=Depends(get_market)):
+def get_candles(
+    symbol: str,
+    from_date: str,
+    to_date: str,
+    resolution: Optional[str] = "D",
+    market=Depends(get_market),
+):
     try:
         res = get_historical_candles(market, symbol, from_date, to_date, resolution)
     except ValueError as e:

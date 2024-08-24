@@ -1,10 +1,12 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 from datetime import date
+
 
 class BidAsk(BaseModel):
     price: float
     size: int
+
 
 class Total(BaseModel):
     tradeValue: int
@@ -14,6 +16,7 @@ class Total(BaseModel):
     transaction: int
     time: int
 
+
 class LastTrade(BaseModel):
     bid: float
     ask: float
@@ -22,6 +25,7 @@ class LastTrade(BaseModel):
     time: int
     serial: int
 
+
 class LastTrial(BaseModel):
     bid: float
     ask: float
@@ -29,6 +33,7 @@ class LastTrial(BaseModel):
     size: int
     time: int
     serial: int
+
 
 class Quote(BaseModel):
     date: date
@@ -62,6 +67,7 @@ class Quote(BaseModel):
     serial: int
     lastUpdated: int
 
+
 class KLine(BaseModel):
     date: date
     open: float
@@ -69,6 +75,7 @@ class KLine(BaseModel):
     low: float
     close: float
     volume: int
+
 
 class KLines(BaseModel):
     symbol: str

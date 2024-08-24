@@ -39,6 +39,7 @@ class OrderResponse(BaseModel):
     ret_msg: str
     work_date: str
 
+
 class CancelResponse(BaseModel):
     ret_code: str
     ret_msg: str
