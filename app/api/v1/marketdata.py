@@ -10,7 +10,7 @@ router = APIRouter()
 @router.get("/intraday/quote", response_model=QuoteResponse)
 def get_quote(
     symbol: str,
-    type: Optional[Literal["oddlot", "EQUITY"]] = "EQUITY",
+    type: Literal["oddlot", "EQUITY"] = "EQUITY",
     market=Depends(get_market),
 ):
     try:
@@ -25,7 +25,7 @@ def get_candles(
     symbol: str,
     from_date: str,
     to_date: str,
-    resolution: Optional[str] = "D",
+    resolution: str = "D",
     market=Depends(get_market),
 ):
     try:
