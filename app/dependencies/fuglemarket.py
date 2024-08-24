@@ -1,5 +1,5 @@
 from typing import Literal
-from app.models.fuglemarket import Quote
+from app.models.fuglemarket import Quote, KLines
 from app.core.config import settings
 from fugle_marketdata import RestClient
 import logging
@@ -33,6 +33,21 @@ class MarketSingleton:
             raise Exception(f"Error: {res.get('message')}")
         quote = Quote(**res)
         return quote
+    
+    def get_historical_candles(self, symbol: str, from_date: str, to_date: str, resolution: str="D") -> KLines:
+        """
+        Get historical candles for a stock
+        symbol: str: stock symbol, e.g. "2330"
+        from_date: str: start date, e.g. "2021-01-01"
+        to_date: str: end date, e.g. "2021-01-31"
+        resolution: str: resolution, e.g. "1/3/5/10/15/30/60" for minute, "D" for daily, "W" for weekly, "M" for
+        """
+        stock = self.client.stock
+        res = stock.historical.candles(symbol=symbol, **{"from":from_date, "to":to_date, "timeframe":resolution})
+        if res.get("statusCode", 200) != 200:
+            raise Exception(f"Error: {res.get('message')}")
+        klines = KLines(**res)
+        return klines
     
 
 

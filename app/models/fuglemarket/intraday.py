@@ -61,3 +61,19 @@ class Quote(BaseModel):
     isClose: bool
     serial: int
     lastUpdated: int
+
+class KLine(BaseModel):
+    date: date
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: int
+
+class KLines(BaseModel):
+    symbol: str
+    type: str
+    exchange: str
+    market: str
+    timeframe: str
+    data: List[KLine]
