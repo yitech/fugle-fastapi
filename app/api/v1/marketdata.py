@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
