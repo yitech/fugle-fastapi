@@ -23,18 +23,17 @@ class MarketSingleton:
     def get_client(self):
         return self.client
 
-    def get_stock_quote(self, symbol: str, kind: Literal["oddlot", "EQUITY"]="EQUITY") -> Quote:
+    def get_intraday_quote(self, symbol: str, kind: Literal["oddlot", "EQUITY"]="EQUITY") -> Quote:
         stock = self.client.stock
         if kind == "EQUITY":
             res = stock.intraday.quote(symbol=symbol)
-        elif kind == "oddlot":
+        else: # kind == "oddlot":
             res = stock.intraday.quote(symbol=symbol, type=kind)
-        else:
-            raise ValueError("Invalid kind: {kind}")
         if res.get("statusCode", 200) != 200:
             raise Exception(f"Error: {res.get('message')}")
         quote = Quote(**res)
         return quote
+    
 
 
 def get_market():
