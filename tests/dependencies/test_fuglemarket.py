@@ -1,6 +1,7 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from app.dependencies import get_market
+from app.models.fuglemarket import KLines
 import requests
 
 @pytest.fixture
@@ -15,7 +16,8 @@ def test_singleton_behavior():
     instance2 = get_market()
     assert instance1 is instance2, "MarketSingleton did not return the same instance"
 
-def test_get_historical_candles_error(mock_rest_client):
+
+def test_get_historical_candles(mock_rest_client):
     # Mock an error response
     mock_response = {
         "statusCode": 404,
@@ -28,3 +30,31 @@ def test_get_historical_candles_error(mock_rest_client):
     with pytest.raises(requests.exceptions.HTTPError) as exc_info:
         market.get_historical_candles(symbol="2330", from_date="2024-08-24", to_date="2024-08-24")
     assert "Resource Not Found" in str(exc_info.value)
+
+
+def test_get_historical_candles_error(mock_rest_client):
+    # Mock an error response
+    mock_response = {
+      "symbol": "2330",
+      "type": "EQUITY",
+      "exchange": "TWSE",
+      "market": "TSE",
+      "timeframe": "D",
+      "data": [
+        {
+          "date": "2024-08-23",
+          "open": 944,
+          "high": 952,
+          "low": 939,
+          "close": 949,
+          "volume": 31203321
+        }
+      ]
+    }
+    mock_rest_client.stock.historical.candles.return_value = mock_response
+
+    market = get_market()
+    
+    actaul = market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
+    expected = KLines(**mock_response)
+    assert actaul == expected
