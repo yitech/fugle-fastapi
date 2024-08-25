@@ -22,7 +22,7 @@ def get_orders_endpoint(trader=Depends(get_trader)):
     try:
         res = get_order_results(trader)
     except requests.exceptions.HTTPError as e:
-        return HTTPException(status_code=requests.status_codes, detail=str(e))
+        return HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         return HTTPException(status_code=501, detail=str(e))
     return res
@@ -33,7 +33,7 @@ def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
     try:
         res = cancel_order(trader, ord_no)
     except requests.exceptions.HTTPError as e:
-        return HTTPException(status_code=requests.status_codes, detail=str(e))
+        return HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         return HTTPException(status_code=501, detail=str(e))
     return res
