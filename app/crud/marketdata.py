@@ -16,4 +16,7 @@ def get_historical_candles(
     to_date: str,
     resolution: str = "D",
 ) -> KLinesResponse:
-    return market.get_historical_candles(symbol, from_date, to_date, resolution)
+    try:
+        return market.get_historical_candles(symbol, from_date, to_date, resolution)
+    except Exception as e:
+        raise ValueError(str(e))

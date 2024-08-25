@@ -4,6 +4,8 @@ from app.schema import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
 from app.crud.marketdata import get_intraday_quote, get_historical_candles
 
+import requests
+
 router = APIRouter()
 
 
@@ -15,9 +17,10 @@ def get_quote(
 ):
     try:
         res = get_intraday_quote(market, symbol, type)
-    except ValueError as e:
-        return HTTPException(status_code=501, detail=str(e))
-    return res
+        return res
+    except Exception as e:
+        raise ValueError(f"Unhandled Exception: {str(e)}")
+    
 
 
 @router.get("/historical/candles", response_model=KLinesResponse)
@@ -30,6 +33,9 @@ def get_candles(
 ):
     try:
         res = get_historical_candles(market, symbol, from_date, to_date, resolution)
-    except ValueError as e:
-        return HTTPException(status_code=501, detail=str(e))
-    return res
+        return res
+    except requests.exceptions.HTTPError as e:
+        raise e
+    except Exception as e:
+        raise Exception(f"Unhandled Exception: {str(e)}")
+    
