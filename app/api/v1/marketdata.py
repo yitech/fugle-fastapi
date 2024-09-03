@@ -2,7 +2,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends
 from app.schema import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
-from app.crud.marketdata import get_intraday_quote, get_historical_candles
+from app.crud import get_intraday_quote, get_historical_candles
 
 import requests
 

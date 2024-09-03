@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from app.dependencies import get_market
-from app.models.fuglemarket import KLines
+from app.models.fuglemarket import KLines, Quote
 import requests
 
 @pytest.fixture
@@ -9,7 +9,6 @@ def mock_rest_client():
     with patch('fugle_marketdata.RestClient') as MockRestClient:
         mock_client_instance = MockRestClient.return_value
         yield mock_client_instance
-
 
 def test_singleton_behavior():
     instance1 = get_market()

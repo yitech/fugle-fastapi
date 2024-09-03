@@ -37,6 +37,7 @@ class MarketSingleton:
             res = stock.intraday.quote(symbol=symbol, type=kind)
         if res.get("statusCode", 200) != 200:
             raise Exception(f"Error: {res.get('message')}")
+        print(res)
         quote = Quote(**res)
         return quote
 

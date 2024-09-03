@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.order import CreateOrder, OrderResponse, OrderResult, CancelResponse
 from app.dependencies import get_trader
-from app.crud.order import create_order, get_order_results, cancel_order
+from app.crud import (
+    create_order, get_order_results, cancel_order
+)
 
 import requests
 
