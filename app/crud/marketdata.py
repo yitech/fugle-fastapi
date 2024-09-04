@@ -3,6 +3,7 @@ from app.dependencies.fuglemarket import MarketSingleton
 from app.schema import QuoteResponse, KLinesResponse
 from app.models.fuglemarket import Quote
 
+
 def get_intraday_quote(
     market: MarketSingleton, symbol: str, kind: Literal["oddlot", "EQUITY"] = "EQUITY"
 ) -> QuoteResponse:
