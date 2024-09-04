@@ -40,6 +40,7 @@ jobs:
           pip install pytest httpx pytest-asyncio pytest-cov
           mkdir -p logs
           cp .env.example .env
+          sed -i 's/^FUGLE_MARKET_API_KEY=.*/FUGLE_MARKET_API_KEY=${{ secrets.FUGLE_MARKET_API_KEY }}/' .env
           pytest --cov=app --cov-report=xml
 
       - name: Upload coverage reports to Codecov

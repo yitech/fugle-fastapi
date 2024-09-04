@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.order import CreateOrder, OrderResponse, OrderResult, CancelResponse
 from app.dependencies import get_trader
-from app.crud.order import create_order, get_order_results, cancel_order
+from app.crud import (
+    create_order, get_order_results, cancel_order
+)
 
+import requests
 
 router = APIRouter()
 
@@ -20,7 +23,9 @@ def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
 def get_orders_endpoint(trader=Depends(get_trader)):
     try:
         res = get_order_results(trader)
-    except ValueError as e:
+    except requests.exceptions.HTTPError as e:
+        return HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
         return HTTPException(status_code=501, detail=str(e))
     return res
 
@@ -29,6 +34,8 @@ def get_orders_endpoint(trader=Depends(get_trader)):
 def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
     try:
         res = cancel_order(trader, ord_no)
-    except ValueError as e:
+    except requests.exceptions.HTTPError as e:
+        return HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
         return HTTPException(status_code=501, detail=str(e))
     return res

@@ -4,6 +4,8 @@ from app.core.config import settings
 from fugle_marketdata import RestClient
 import logging
 
+import requests
+
 FUGLE_MARKET_API_KEY = settings.fugle_market_api_key
 
 logger = logging.getLogger("fugle")
@@ -35,6 +37,7 @@ class MarketSingleton:
             res = stock.intraday.quote(symbol=symbol, type=kind)
         if res.get("statusCode", 200) != 200:
             raise Exception(f"Error: {res.get('message')}")
+        print(res)
         quote = Quote(**res)
         return quote
 
@@ -59,10 +62,13 @@ class MarketSingleton:
         res = stock.historical.candles(
             symbol=symbol, **{"from": from_date, "to": to_date, "timeframe": resolution}
         )
-        if res.get("statusCode", 200) != 200:
+        if res.get("statusCode", 200) == 200:
+            klines = KLines(**res)
+            return klines
+        elif res.get("statusCode", 200) == 404:
+            raise requests.exceptions.HTTPError(f"Error: {res.get('message')}")
+        else:
             raise Exception(f"Error: {res.get('message')}")
-        klines = KLines(**res)
-        return klines
 
 
 def get_market():

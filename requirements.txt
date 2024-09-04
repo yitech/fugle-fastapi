@@ -5,3 +5,5 @@ fugle-trade>=1.2.0
 uvicorn
 fugle-marketdata>=2.2.0
 schedule
+requests
+types-requests
