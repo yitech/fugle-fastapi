@@ -98,12 +98,14 @@ def test_get_intraday_quote(mock_rest_client):
     expected_quote = Quote(**mock_instance.stock.intraday.quote.return_value)
     assert actual_quote == expected_quote, "The returned Quote does not match the expected Quote"
 
-"""
-@patch('fugle_marketdata.RestClient')
+
+@patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
+@patch('app.dependencies.fuglemarket.RestClient')
 def test_get_historical_candles(mock_rest_client):
     mock_instance = MagicMock()
-    mock_instance.return_value = mock_instance
-    mock_response = {
+    mock_instance.stock = MagicMock()
+    mock_instance.stock.historical = MagicMock()
+    mock_instance.stock.historical.candles.return_value = {
       "symbol": "2330",
       "type": "EQUITY",
       "exchange": "TWSE",
@@ -120,16 +122,16 @@ def test_get_historical_candles(mock_rest_client):
         }
       ]
     }
-    mock_rest_client.stock.historical.candles.return_value = mock_response
+    mock_rest_client.return_value = mock_instance
     market = get_market()
     actaul = market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
-    expected = KLines(**mock_response)
+    expected = KLines(**mock_instance.stock.historical.candles.return_value)
     mock_rest_client.return_value.stock.historical.candles.assert_called_once_with(
-            "2330", **{"from": "2024-08-23", "to": "2024-08-23", "timeframe": "D"}
+            symbol="2330", **{"from": "2024-08-23", "to": "2024-08-23", "timeframe": "D"}
     )
     assert actaul == expected
 
-
+"""
 @patch('fugle_marketdata.RestClient')
 def test_get_historical_candles_error(mock_rest_client):
     # Create a mock instance of RestClient
