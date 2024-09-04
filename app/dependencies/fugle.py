@@ -51,9 +51,6 @@ class TraderSingleton:
             schedule.run_pending()
             time.sleep(1)
 
-    def get_trader(self):
-        return self
-
     def place_order(self, order: OrderObject):
         res = self.trader.place_order(order)
         logger.info(f"Order placed: {res}")
@@ -148,4 +145,4 @@ class TraderSingleton:
 
 # Function to get the trader instance
 def get_trader():
-    return TraderSingleton().get_trader()
+    return TraderSingleton()

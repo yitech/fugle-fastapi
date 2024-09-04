@@ -24,9 +24,6 @@ class MarketSingleton:
         self.client = RestClient(api_key=FUGLE_MARKET_API_KEY)
         logger.info("Fugle Market initialized")
 
-    def get_client(self):
-        return self.client
-
     def get_intraday_quote(
         self, symbol: str, kind: Literal["oddlot", "EQUITY"] = "EQUITY"
     ) -> Quote:
