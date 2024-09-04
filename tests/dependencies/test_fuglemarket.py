@@ -10,27 +10,22 @@ def reset_singleton():
     MarketSingleton._instance = None
 
 
-"""
-@patch('fugle_marketdata.RestClient')
+@patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
+@patch('app.dependencies.fuglemarket.RestClient')
 def test_singleton_behavior(mock_rest_client):
     mock_instance = MagicMock()
-    mock_instance.return_value = mock_instance
+    mock_rest_client.return_value = mock_instance
     instance1 = get_market()
     instance2 = get_market()
+    mock_rest_client.assert_called_once_with(api_key="mock_api_key")
     assert instance1 is instance2, "MarketSingleton did not return the same instance"
-"""
 
+@patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
 @patch('app.dependencies.fuglemarket.RestClient')
 def test_get_intraday_quote(mock_rest_client):
-
-    # Create a mock instance for the RestClient
     mock_instance = MagicMock()
-
-    # Mock the stock and intraday attributes separately
     mock_instance.stock = MagicMock()
     mock_instance.stock.intraday = MagicMock()
-
-    # Mock the return value for stock.intraday.quote
     mock_instance.stock.intraday.quote.return_value = {
         "date": "2024-09-03",
         "type": "EQUITY",
@@ -96,18 +91,10 @@ def test_get_intraday_quote(mock_rest_client):
         "serial": 3797531,
         "lastUpdated": 1725331190961515
     }
-
-    # Make the mock return the mocked instance
     mock_rest_client.return_value = mock_instance
-
-    # Call the function under test
     market = get_market()
     actual_quote = market.get_intraday_quote(symbol="2330")
-
-    # Assert that the method was called
     mock_instance.stock.intraday.quote.assert_called_once_with(symbol="2330")
-
-    # Verify the expected result
     expected_quote = Quote(**mock_instance.stock.intraday.quote.return_value)
     assert actual_quote == expected_quote, "The returned Quote does not match the expected Quote"
 
