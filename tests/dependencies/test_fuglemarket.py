@@ -131,84 +131,20 @@ def test_get_historical_candles(mock_rest_client):
     )
     assert actaul == expected
 
-"""
-@patch('fugle_marketdata.RestClient')
+@patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
+@patch('app.dependencies.fuglemarket.RestClient')
 def test_get_historical_candles_error(mock_rest_client):
-    # Create a mock instance of RestClient
     mock_instance = MagicMock()
-    
-    # Set up the mock to return a specific response when the method is called
-    mock_response = {
+    mock_instance.stock = MagicMock()
+    mock_instance.stock.historical = MagicMock()
+    mock_instance.stock.historical.candles.return_value = {
         "statusCode": 404,
         "message": "Resource Not Found"
     }
-    
-    # Configure mock_rest_client's stock.historical.candles to return the mock_response
-    mock_rest_client.return_value.stock.historical.candles.return_value = mock_response
 
-    # Assuming get_market returns an object with a 'client' that uses mock_rest_client
-    market = get_market()  # Ensure this uses the mock
-
-    # Now test if the exception is raised
-    # with pytest.raises(requests.exceptions.HTTPError) as exc_info:
-    res = market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
-    assert res == None
-    # Check if the exception contains the right message
-    # assert "Resource Not Found" in str(exc_info.value)
-"""
-"""
-@pytest.fixture
-def mock_rest_client():
-    with patch('fugle_marketdata.RestClient') as MockRestClient:
-        mock_client_instance = MockRestClient.return_value
-        yield mock_client_instance
-
-def test_singleton_behavior():
-    instance1 = get_market()
-    instance2 = get_market()
-    assert instance1 is instance2, "MarketSingleton did not return the same instance"
-
-
-def test_get_historical_candles(mock_rest_client):
-    # Mock an error response
-    mock_response = {
-        "statusCode": 404,
-        "message": "Resource Not Found"
-    }
-    mock_rest_client.stock.historical.candles.return_value = mock_response
+    mock_rest_client.return_value = mock_instance
 
     market = get_market()
-    
     with pytest.raises(requests.exceptions.HTTPError) as exc_info:
-        market.get_historical_candles(symbol="2330", from_date="2024-08-24", to_date="2024-08-24")
+        market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
     assert "Resource Not Found" in str(exc_info.value)
-
-
-def test_get_historical_candles_error(mock_rest_client):
-    # Mock an error response
-    mock_response = {
-      "symbol": "2330",
-      "type": "EQUITY",
-      "exchange": "TWSE",
-      "market": "TSE",
-      "timeframe": "D",
-      "data": [
-        {
-          "date": "2024-08-23",
-          "open": 944,
-          "high": 952,
-          "low": 939,
-          "close": 949,
-          "volume": 31203321
-        }
-      ]
-    }
-    mock_rest_client.stock.historical.candles.return_value = mock_response
-
-    market = get_market()
-    
-    actaul = market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
-    expected = KLines(**mock_response)
-    assert actaul == expected
-
-"""
