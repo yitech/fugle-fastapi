@@ -72,3 +72,8 @@ class OrderResult(BaseModel):
     trade: Trade
     work_date: str
     user_def: str = ""
+
+class MarketStatusResponse(BaseModel):
+    is_trading_day: bool
+    last_trading_day: str
+    next_trading_day: str

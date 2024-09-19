@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.order import CreateOrder, OrderResponse, OrderResult, CancelResponse
+from app.schema.order import (
+    CreateOrder, OrderResponse, OrderResult, CancelResponse, MarketStatusResponse
+)
 from app.dependencies import get_trader
 from app.crud import (
-    create_order, get_order_results, cancel_order
+    create_order, get_order_results, cancel_order, get_market_status
 )
 import logging
 import requests
@@ -55,6 +57,15 @@ def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
         return HTTPException(status_code=500, detail="Error connecting to the trading service.")
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {e}")
+        return HTTPException(status_code=500, detail="Internal Server Error")
+    
+@router.get("/market_status", response_model=MarketStatusResponse)
+def get_market_status_endpoint(trader=Depends(get_trader)):
+    try:
+        res = get_market_status(trader)
+        return res
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         return HTTPException(status_code=500, detail="Internal Server Error")

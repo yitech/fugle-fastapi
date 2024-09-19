@@ -97,3 +97,8 @@ class CancelResult(BaseModel):
     ord_time: str
     ret_code: str
     ret_msg: str
+
+class MarketStatusResult(BaseModel):
+    is_trading_day: bool
+    last_trading_day: str
+    next_trading_day: str

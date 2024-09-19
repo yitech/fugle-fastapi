@@ -56,3 +56,4 @@ def get_candles(
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
