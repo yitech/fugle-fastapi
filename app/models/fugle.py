@@ -1,6 +1,8 @@
-from typing import Dict, Any
+from typing import Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, field_validator, ValidationInfo
+from pydantic import (
+    RootModel, BaseModel, field_validator, ValidationInfo
+)
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
 
@@ -102,3 +104,11 @@ class MarketStatusResult(BaseModel):
     is_trading_day: bool
     last_trading_day: str
     next_trading_day: str
+
+class SettlementItem(BaseModel):
+    c_date: str
+    date: str  
+    price: str 
+
+class SettlementResult(RootModel):
+    root: List[SettlementItem]

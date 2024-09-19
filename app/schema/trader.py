@@ -1,4 +1,7 @@
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from typing import List
+from pydantic import (
+    RootModel, BaseModel, Field, ValidationInfo, field_validator
+)
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
 
@@ -77,3 +80,11 @@ class MarketStatusResponse(BaseModel):
     is_trading_day: bool
     last_trading_day: str
     next_trading_day: str
+
+class SettlementItem(BaseModel):
+    c_date: str
+    date: str
+    price: str
+
+class SettlementResponse(RootModel):
+    root: List[SettlementItem]

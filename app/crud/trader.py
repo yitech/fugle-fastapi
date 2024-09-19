@@ -1,6 +1,7 @@
 from app.dependencies.fugle import TraderSingleton
-from app.schema.order import (
-    CreateOrder, OrderResponse, OrderResult, CancelResponse, MarketStatusResponse
+from app.schema.trader import (
+    CreateOrder, OrderResponse, OrderResult, CancelResponse, MarketStatusResponse,
+    SettlementResponse
 )
 from fugle_trade.order import OrderObject
 
@@ -35,3 +36,7 @@ def cancel_order(trader: TraderSingleton, ord_no: str) -> CancelResponse:
 def get_market_status(trader: TraderSingleton) -> MarketStatusResponse:
     res = trader.get_market_status()
     return MarketStatusResponse(**res.model_dump())
+
+def get_settlements(trader: TraderSingleton) -> SettlementResponse:
+    res = trader.get_settlements()
+    return SettlementResponse(**res.model_dump())

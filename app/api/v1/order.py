@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.order import (
+from app.schema.trader import (
     CreateOrder, OrderResponse, OrderResult, CancelResponse, MarketStatusResponse
 )
 from app.dependencies import get_trader
