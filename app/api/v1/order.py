@@ -4,8 +4,10 @@ from app.dependencies import get_trader
 from app.crud import (
     create_order, get_order_results, cancel_order
 )
-
+import logging
 import requests
+
+logger = logging.getLogger("fugle")
 
 router = APIRouter()
 
@@ -14,28 +16,45 @@ router = APIRouter()
 def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
     try:
         res = create_order(trader, order)
+        return res
     except ValueError as e:
-        return HTTPException(status_code=501, detail=str(e))
-    return res
+        logger.error(f"ValueError: {e}")
+        raise HTTPException(status_code=422, detail=f"Invalid input: {str(e)}")
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"RequestException: {req_err}")
+        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @router.get("/orders", response_model=list[OrderResult])
 def get_orders_endpoint(trader=Depends(get_trader)):
     try:
         res = get_order_results(trader)
+        return res
     except requests.exceptions.HTTPError as e:
-        return HTTPException(status_code=404, detail=str(e))
+        logger.error(f"HTTPError: {e}")
+        raise HTTPException(status_code=404, detail="Orders not found")
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"RequestException: {req_err}")
+        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
     except Exception as e:
-        return HTTPException(status_code=501, detail=str(e))
-    return res
+        logger.error(f"Unhandled Exception: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @router.delete("/order/{ord_no}", response_model=CancelResponse)
 def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
     try:
         res = cancel_order(trader, ord_no)
+        return res
     except requests.exceptions.HTTPError as e:
-        return HTTPException(status_code=404, detail=str(e))
+        logger.error(f"HTTPError: {e}")
+        raise HTTPException(status_code=404, detail="Order not found")
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"RequestException: {req_err}")
+        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
     except Exception as e:
-        return HTTPException(status_code=501, detail=str(e))
-    return res
+        logger.error(f"Unhandled Exception: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
