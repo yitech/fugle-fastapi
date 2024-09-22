@@ -51,6 +51,7 @@ app.include_router(order.router, prefix="/api/v1", tags=["Order"])
 app.include_router(marketdata.router, prefix="/api/v1", tags=["Market"])
 app.include_router(wallet.router, prefix="/api/v1", tags=["Wallet"])
 
+
 @app.get("/api/v1/ping", tags=["System"])
 def ping():
     return {"result": "pong"}

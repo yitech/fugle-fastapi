@@ -1,9 +1,8 @@
 from typing import Dict, Any, List
 from enum import Enum
-from pydantic import (
-    RootModel, BaseModel, field_validator, ValidationInfo
-)
+from pydantic import RootModel, BaseModel, field_validator, ValidationInfo
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
+
 
 class OrderPlacement(BaseModel):
     ord_date: str
@@ -13,6 +12,7 @@ class OrderPlacement(BaseModel):
     ret_code: str
     ret_msg: str
     work_date: str
+
 
 class OrderResult(BaseModel):
     ap_code: APCode
@@ -108,12 +108,14 @@ class CancelResult(BaseModel):
     ret_code: str
     ret_msg: str
 
+
 class MarketStatusResult(BaseModel):
     is_trading_day: bool
     last_trading_day: str
     next_trading_day: str
 
+
 class Settlement(BaseModel):
     c_date: str
-    date: str  
-    price: str 
+    date: str
+    price: str

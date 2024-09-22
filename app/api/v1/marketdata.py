@@ -10,6 +10,7 @@ logger = logging.getLogger("fugle")
 
 router = APIRouter()
 
+
 @router.get("/intraday/quote", response_model=QuoteResponse)
 def get_quote(
     symbol: str,
@@ -24,7 +25,9 @@ def get_quote(
         raise HTTPException(status_code=400, detail=f"HTTP Error: {str(http_err)}")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        raise HTTPException(status_code=500, detail="Error connecting to the market data source.")
+        raise HTTPException(
+            status_code=500, detail="Error connecting to the market data source."
+        )
     except ValueError as val_err:
         logger.error(f"ValueError: {val_err}")
         raise HTTPException(status_code=422, detail=f"Invalid input: {str(val_err)}")
@@ -49,11 +52,12 @@ def get_candles(
         raise HTTPException(status_code=400, detail=f"HTTP Error: {str(http_err)}")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        raise HTTPException(status_code=500, detail="Error connecting to the market data source.")
+        raise HTTPException(
+            status_code=500, detail="Error connecting to the market data source."
+        )
     except ValueError as val_err:
         logger.error(f"ValueError: {val_err}")
         raise HTTPException(status_code=422, detail=f"Invalid input: {str(val_err)}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
-

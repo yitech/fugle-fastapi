@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.trader import (
-    CreateOrder, OrderResponse, OrderResultResponse, CancelResponse, MarketStatusResponse
+    CreateOrder,
+    OrderResponse,
+    OrderResultResponse,
+    CancelResponse,
+    MarketStatusResponse,
 )
 from app.dependencies import get_trader
-from app.crud import (
-    create_order, get_order_results, cancel_order, get_market_status
-)
+from app.crud import create_order, get_order_results, cancel_order, get_market_status
 import logging
 import requests
 
@@ -24,7 +26,9 @@ def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
         return HTTPException(status_code=422, detail=f"Invalid input: {str(e)}")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        return HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         return HTTPException(status_code=500, detail="Internal Server Error")
@@ -40,7 +44,9 @@ def get_orders_endpoint(trader=Depends(get_trader)):
         return HTTPException(status_code=404, detail="Orders not found")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        return HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         return HTTPException(status_code=500, detail="Internal Server Error")
@@ -56,11 +62,14 @@ def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
         return HTTPException(status_code=404, detail="Order not found")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        return HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         return HTTPException(status_code=500, detail="Internal Server Error")
-    
+
+
 @router.get("/market_status", response_model=MarketStatusResponse)
 def get_market_status_endpoint(trader=Depends(get_trader)):
     try:

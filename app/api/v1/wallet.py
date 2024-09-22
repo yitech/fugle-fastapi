@@ -1,12 +1,8 @@
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from app.dependencies import get_trader
-from app.crud import (
-    get_settlements
-)
-from app.schema.trader import (
-    SettlementResponse
-)
+from app.crud import get_settlements
+from app.schema.trader import SettlementResponse
 import logging
 
 logger = logging.getLogger("fugle")
@@ -21,10 +17,13 @@ def get_settlements_endpoint(trader=Depends(get_trader)):
         return res
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        return HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
         return HTTPException(status_code=500, detail="Internal Server Error")
+
 
 """
 @router.get("/balance", response_model="Balance")
