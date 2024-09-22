@@ -30,7 +30,7 @@ def get_order_results(trader: TraderSingleton) -> list[OrderResultResponse]:
     results: list[OrderResultResponse] = []
     for order in order_results:
         results.append(OrderResultResponse(**order.model_dump()))
-    return trader.get_order_results()
+    return results
 
 
 def cancel_order(trader: TraderSingleton, ord_no: str) -> CancelResponse:

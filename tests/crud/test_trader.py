@@ -52,17 +52,35 @@ def test_create_order(mock_trader):
     assert response.ord_no == mock_response.ord_no
     assert response.ret_code == mock_response.ret_code
 
-"""
+
 def test_get_order_results(mock_trader):
     # Mocked order results
     mock_orders = [
         OrderResult(
-            ap_code="Common", avg_price=100.0, bs_flag="Buy", buy_sell="Buy",
-            cel_qty=0, cel_qty_share=0, celable="Yes", err_code="", err_msg="",
-            mat_qty=10, mat_qty_share=100, od_price=100.0, ord_date="2023-09-01",
-            ord_no="ORD123", ord_status="Filled", ord_time="12:30:00", org_qty=10,
-            org_qty_share=100, pre_ord_no="", price_flag="LMT", stock_no="1234",
-            trade="DayTrade", work_date="2023-09-01"
+            ap_code="1",
+            avg_price=0.0,
+            bs_flag="R",
+            buy_sell="B",
+            cel_qty=1,
+            cel_qty_share=1000,
+            celable="2",
+            err_code="00000000",
+            err_msg="",
+            mat_qty=0,
+            mat_qty_share=0,
+            od_price=25.95,
+            ord_date="20220310",
+            ord_no="A4461",
+            ord_status="2",
+            ord_time="094932438",
+            org_qty=1,
+            org_qty_share=1000,
+            pre_ord_no="",
+            price_flag="2",
+            stock_no="2884",
+            trade="0",
+            work_date="20220310",
+            user_def="下單測試"
         )
     ]
     
@@ -78,6 +96,7 @@ def test_get_order_results(mock_trader):
     assert results[0].ord_no == mock_orders[0].ord_no
 
 
+"""
 def test_cancel_order(mock_trader):
     # Mocked cancel result
     mock_cancel_result = CancelResult(
