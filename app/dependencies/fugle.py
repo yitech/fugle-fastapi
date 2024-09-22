@@ -6,7 +6,7 @@ from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
 from app.models.fugle import (
     OrderResult, NotifyAck, CancelResult, MarketStatusResult,
-    SettlementResult
+    SettlementResult, SettlementItem
 )
 from app.core.config import settings
 import logging
@@ -76,8 +76,9 @@ class TraderSingleton:
         return MarketStatusResult(**res)
     
     def get_settlements(self):
-        res = self.trader.get_settlements()
-        return SettlementResult(**res)
+        data = self.trader.get_settlements()
+        res = [SettlementItem(**item) for item in data]
+        return SettlementResult(root=res)
 
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:
