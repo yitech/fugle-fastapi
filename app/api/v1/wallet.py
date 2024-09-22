@@ -10,7 +10,7 @@ logger = logging.getLogger("fugle")
 router = APIRouter()
 
 
-@router.get("/settlements", response_model=SettlementResponse)
+@router.get("/settlements", response_model=list[SettlementResponse])
 def get_settlements_endpoint(trader=Depends(get_trader)):
     try:
         res = get_settlements(trader)

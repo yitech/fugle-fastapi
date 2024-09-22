@@ -135,20 +135,20 @@ def test_get_market_status(mock_trader):
     mock_trader.get_market_status.assert_called_once()
     assert isinstance(response, MarketStatusResponse)
     assert response.is_trading_day == mock_market_status.is_trading_day
-
+"""
 
 def test_get_settlements(mock_trader):
     # Mocked settlement result
     mock_settlements = [
         Settlement(
-            c_date="2023-08-31",
-            date="2023-08-29",
-            price="1000"
+            c_date="20220310",
+            date="20220308",
+            price="-80912"
         ),
         Settlement(
-            c_date="2023-09-01",
-            date="2023-08-30",
-            price="1500"
+            c_date="20220311",
+            date="20220309",
+            price="4826"
         )
     ]
     
@@ -163,4 +163,19 @@ def test_get_settlements(mock_trader):
     assert isinstance(response[0], SettlementResponse)
     assert response[0].c_date == mock_settlements[0].c_date
     assert response[1].c_date == mock_settlements[1].c_date
-"""
+
+
+def test_get_emtpy_settlements(mock_trader):
+    # Mocked settlement result
+    mock_settlements = [
+    ]
+    
+    mock_trader.get_settlements.return_value = mock_settlements
+
+    # Call the function
+    response = get_settlements(mock_trader)
+
+    # Assertions
+    mock_trader.get_settlements.assert_called_once()
+    assert len(response) == 0
+
