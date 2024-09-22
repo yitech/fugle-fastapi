@@ -58,6 +58,11 @@ You can see the API progress in
 
 
 # For developer
+## Local Run
+```
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
 You can always use flake8 to make sure the coding quality
 
 ## Installation

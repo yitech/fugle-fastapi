@@ -4,6 +4,16 @@ from pydantic import BaseModel, field_validator, ValidationInfo
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
 
+class OrderPlacement(BaseModel):
+    ord_date: str
+    ord_time: str
+    ord_type: str
+    ord_no: str
+    ret_code: str
+    ret_msg: str
+    work_date: str
+
+
 class OrderResult(BaseModel):
     ap_code: APCode
     avg_price: float
@@ -97,3 +107,15 @@ class CancelResult(BaseModel):
     ord_time: str
     ret_code: str
     ret_msg: str
+
+
+class MarketStatusResult(BaseModel):
+    is_trading_day: bool
+    last_trading_day: str
+    next_trading_day: str
+
+
+class Settlement(BaseModel):
+    c_date: str
+    date: str
+    price: str

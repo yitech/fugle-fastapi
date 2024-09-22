@@ -47,7 +47,7 @@ class CancelResponse(BaseModel):
     ord_time: str
 
 
-class OrderResult(BaseModel):
+class OrderResultResponse(BaseModel):
     ap_code: APCode
     avg_price: float
     bs_flag: BSFlag
@@ -72,3 +72,15 @@ class OrderResult(BaseModel):
     trade: Trade
     work_date: str
     user_def: str = ""
+
+
+class MarketStatusResponse(BaseModel):
+    is_trading_day: bool
+    last_trading_day: str
+    next_trading_day: str
+
+
+class SettlementResponse(BaseModel):
+    c_date: str
+    date: str
+    price: str

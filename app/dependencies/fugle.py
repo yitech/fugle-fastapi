@@ -4,7 +4,14 @@ from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
-from app.models.fugle import OrderResult, NotifyAck, CancelResult
+from app.models.fugle import (
+    OrderResult,
+    OrderPlacement,
+    NotifyAck,
+    CancelResult,
+    MarketStatusResult,
+    Settlement,
+)
 from app.core.config import settings
 import logging
 
@@ -51,10 +58,10 @@ class TraderSingleton:
             schedule.run_pending()
             time.sleep(1)
 
-    def place_order(self, order: OrderObject):
+    def place_order(self, order: OrderObject) -> OrderPlacement:
         res = self.trader.place_order(order)
         logger.info(f"Order placed: {res}")
-        return res
+        return OrderPlacement(**res.model_dump())
 
     def cancel_order(self, ord_no: str) -> CancelResult:
         if ord_no not in self.orders:
@@ -67,6 +74,15 @@ class TraderSingleton:
 
     def get_order_results(self):
         return list(self.orders.values())
+
+    def get_market_status(self):
+        res = self.trader.get_market_status()
+        return MarketStatusResult(**res)
+
+    def get_settlements(self) -> list[Settlement]:
+        data = self.trader.get_settlements()
+        res = [Settlement(**item) for item in data]
+        return res
 
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:

@@ -1,9 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.order import CreateOrder, OrderResponse, OrderResult, CancelResponse
-from app.dependencies import get_trader
-from app.crud import (
-    create_order, get_order_results, cancel_order
+from app.schema.trader import (
+    CreateOrder,
+    OrderResponse,
+    OrderResultResponse,
+    CancelResponse,
+    MarketStatusResponse,
 )
+from app.dependencies import get_trader
+from app.crud import create_order, get_order_results, cancel_order, get_market_status
 import logging
 import requests
 
@@ -19,29 +23,33 @@ def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
         return res
     except ValueError as e:
         logger.error(f"ValueError: {e}")
-        raise HTTPException(status_code=422, detail=f"Invalid input: {str(e)}")
+        return HTTPException(status_code=422, detail=f"Invalid input: {str(e)}")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        return HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/orders", response_model=list[OrderResult])
+@router.get("/orders", response_model=list[OrderResultResponse])
 def get_orders_endpoint(trader=Depends(get_trader)):
     try:
         res = get_order_results(trader)
         return res
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
-        raise HTTPException(status_code=404, detail="Orders not found")
+        return HTTPException(status_code=404, detail="Orders not found")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        return HTTPException(status_code=500, detail="Internal Server Error")
 
 
 @router.delete("/order/{ord_no}", response_model=CancelResponse)
@@ -51,10 +59,22 @@ def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
         return res
     except requests.exceptions.HTTPError as e:
         logger.error(f"HTTPError: {e}")
-        raise HTTPException(status_code=404, detail="Order not found")
+        return HTTPException(status_code=404, detail="Order not found")
     except requests.exceptions.RequestException as req_err:
         logger.error(f"RequestException: {req_err}")
-        raise HTTPException(status_code=500, detail="Error connecting to the trading service.")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        return HTTPException(status_code=500, detail="Internal Server Error")
+
+
+@router.get("/market_status", response_model=MarketStatusResponse)
+def get_market_status_endpoint(trader=Depends(get_trader)):
+    try:
+        res = get_market_status(trader)
+        return res
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {e}")
+        return HTTPException(status_code=500, detail="Internal Server Error")
