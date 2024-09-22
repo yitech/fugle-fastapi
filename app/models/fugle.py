@@ -1,6 +1,6 @@
-from typing import Dict, Any, List
+from typing import Dict, Any
 from enum import Enum
-from pydantic import RootModel, BaseModel, field_validator, ValidationInfo
+from pydantic import BaseModel, field_validator, ValidationInfo
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
 
