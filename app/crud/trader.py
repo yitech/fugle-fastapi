@@ -21,12 +21,12 @@ def create_order(trader: TraderSingleton, order: CreateOrder) -> OrderResponse:
         stock_no=order.stock_no,
         quantity=order.quantity,
     )
-    order_response: OrderPlacement = trader.place_order(order)
-    return OrderResponse(**order_response.model_dump())
+    order_placement: OrderPlacement = trader.place_order(order)
+    return OrderResponse(**order_placement.model_dump())
 
 
 def get_order_results(trader: TraderSingleton) -> list[OrderResultResponse]:
-    order_results = trader.get_order_results()
+    order_results: list[OrderResult] = trader.get_order_results()
     results: list[OrderResultResponse] = []
     for order in order_results:
         results.append(OrderResultResponse(**order.model_dump()))

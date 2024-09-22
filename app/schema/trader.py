@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import (
-    RootModel, BaseModel, Field, ValidationInfo, field_validator
+    BaseModel, Field, ValidationInfo, field_validator
 )
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 

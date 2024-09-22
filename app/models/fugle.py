@@ -11,6 +11,7 @@ class OrderPlacement(BaseModel):
     ord_type: str
     ord_no: str
     ret_code: str
+    ret_msg: str
     work_date: str
 
 class OrderResult(BaseModel):
