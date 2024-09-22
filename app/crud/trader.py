@@ -42,5 +42,8 @@ def get_market_status(trader: TraderSingleton) -> MarketStatusResponse:
     return MarketStatusResponse(**res.model_dump())
 
 def get_settlements(trader: TraderSingleton) -> list[SettlementResponse]:
-    res: list[Settlement] = trader.get_settlements()
+    settlement_result: list[Settlement] = trader.get_settlements()
+    res: list[SettlementResponse] = []
+    for settlement in settlement_result:
+        res.append(SettlementResponse(**settlement.model_dump()))
     return res
