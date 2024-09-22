@@ -96,28 +96,28 @@ def test_get_order_results(mock_trader):
     assert results[0].ord_no == mock_orders[0].ord_no
 
 
-"""
+
 def test_cancel_order(mock_trader):
     # Mocked cancel result
     mock_cancel_result = CancelResult(
-        ord_date="2023-09-01",
-        ord_time="12:35:00",
-        ret_code="000",
-        ret_msg="Success"
+        ord_date="20220310",
+        ord_time="101825110",
+        ret_code="000000",
+        ret_msg=""
     )
     
     mock_trader.cancel_order.return_value = mock_cancel_result
 
     # Call the function
-    response = cancel_order(mock_trader, "ORD123")
+    response = cancel_order(mock_trader, "A4461")
 
     # Assertions
-    mock_trader.cancel_order.assert_called_once_with("ORD123")
+    mock_trader.cancel_order.assert_called_once_with("A4461")
     assert isinstance(response, CancelResponse)
     assert response.ret_code == mock_cancel_result.ret_code
     assert response.ret_msg == mock_cancel_result.ret_msg
 
-
+"""
 def test_get_market_status(mock_trader):
     # Mocked market status result
     mock_market_status = MarketStatusResult(
