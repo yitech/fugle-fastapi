@@ -50,7 +50,7 @@ class CancelResponse(BaseModel):
     ord_time: str
 
 
-class OrderResult(BaseModel):
+class OrderResultResponse(BaseModel):
     ap_code: APCode
     avg_price: float
     bs_flag: BSFlag
@@ -81,10 +81,7 @@ class MarketStatusResponse(BaseModel):
     last_trading_day: str
     next_trading_day: str
 
-class SettlementItem(BaseModel):
+class SettlementResponse(BaseModel):
     c_date: str
     date: str
     price: str
-
-class SettlementResponse(RootModel):
-    root: List[SettlementItem]

@@ -5,6 +5,13 @@ from pydantic import (
 )
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
+class OrderPlacement(BaseModel):
+    ord_date: str
+    ord_time: str
+    ord_type: str
+    ord_no: str
+    ret_code: str
+    work_date: str
 
 class OrderResult(BaseModel):
     ap_code: APCode
@@ -105,10 +112,7 @@ class MarketStatusResult(BaseModel):
     last_trading_day: str
     next_trading_day: str
 
-class SettlementItem(BaseModel):
+class Settlement(BaseModel):
     c_date: str
     date: str  
     price: str 
-
-class SettlementResult(RootModel):
-    root: List[SettlementItem]

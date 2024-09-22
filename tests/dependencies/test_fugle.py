@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from app.dependencies import get_trader, TraderSingleton
 from app.models.fugle import (
-    SettlementResult, SettlementItem
+    Settlement
 )
 import requests
 
@@ -54,9 +54,8 @@ def test_get_settlements(mock_trader, mock_trader_methods):
     mock_trader.get_settlements.assert_called_once()
 
     # Verify the result is an instance of SettlementResult
-    assert isinstance(result, SettlementResult)
-    assert len(result.root) == 2
+    assert len(result) == 2
 
     # Check if the values in SettlementResult are correct
-    assert result.root[0] == SettlementItem(c_date="20220310", date="20220308", price="-80912")
-    assert result.root[1] == SettlementItem(c_date="20220311", date="20220309", price="4826")
+    assert result[0] == Settlement(c_date="20220310", date="20220308", price="-80912")
+    assert result[1] == Settlement(c_date="20220311", date="20220309", price="4826")

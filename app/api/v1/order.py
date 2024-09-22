@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.trader import (
-    CreateOrder, OrderResponse, OrderResult, CancelResponse, MarketStatusResponse
+    CreateOrder, OrderResponse, OrderResultResponse, CancelResponse, MarketStatusResponse
 )
 from app.dependencies import get_trader
 from app.crud import (
@@ -30,7 +30,7 @@ def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
         return HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/orders", response_model=list[OrderResult])
+@router.get("/orders", response_model=list[OrderResultResponse])
 def get_orders_endpoint(trader=Depends(get_trader)):
     try:
         res = get_order_results(trader)
