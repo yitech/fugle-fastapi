@@ -63,7 +63,7 @@ class Quote(BaseModel):
     total: Total
     lastTrade: LastTrade
     lastTrial: LastTrial
-    isClose: bool
+    isTrial: bool
     serial: int
     lastUpdated: int
 
