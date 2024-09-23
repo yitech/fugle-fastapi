@@ -129,49 +129,49 @@ class Balance(BaseModel):
 
 class InventoryDetail(BaseModel):
     buy_sell: str
-    cost_r: Optional[float] = None  # 已分攤成本
-    fee: float  # 手續費
-    make_a: float  # 未實現損益
-    make_a_per: float  # 未實現獲益率
-    ord_no: str  # 委託書號
-    pay_n: float  # 淨收付金額
-    price: float  # 成交價格
-    price_evn: float  # 平衡損益價
-    qty: int  # 庫存股數
-    qty_c: Optional[int] = None  # 調整股數
-    qty_h: Optional[int] = None  # 實高權值股數
-    qty_r: Optional[int] = None  # 已分攤股數
-    t_date: str  # 成交日期
-    t_time: Optional[str] = None  # 成交時間
-    tax: Optional[float] = None  # 交易稅
-    tax_g: Optional[float] = None  # 證所稅
-    trade: Optional[int] = None  # 交易類別
-    value_mkt: float  # 市值(無假除權息)
-    value_now: float  # 市值(有假除權息)
-    user_def: Optional[str] = None  # 自訂欄位
+    cost_r: Optional[float] = None
+    fee: float
+    make_a: float
+    make_a_per: float
+    ord_no: str 
+    pay_n: float 
+    price: float 
+    price_evn: float  
+    qty: int
+    qty_c: Optional[int] = None  
+    qty_h: Optional[int] = None  
+    qty_r: Optional[int] = None  
+    t_date: str
+    t_time: Optional[str] = None 
+    tax: Optional[float] = None  
+    tax_g: Optional[float] = None
+    trade: Optional[int] = None  
+    value_mkt: float  
+    value_now: float  
+    user_def: Optional[str] = None 
 
 class InventorySummary(BaseModel):
-    ap_code: Optional[str] = None  # 盤別
-    cost_qty: float  # 成本股數
-    cost_sum: float  # 成本總計
-    make_a_per: float  # 未實現獲利率
-    make_a_sum: float  # 未實現損益小計
-    price_avg: float  # 成交均價
-    price_evn: float  # 損益平衡價
-    price_mkt: float  # 即時價格(無假除權息)
-    price_now: float  # 即時價格(有假除權息)
-    price_qty_sum: float  # 價金總計
-    qty_b: int  # 今委買股數
-    qty_bm: int  # 今委買成交股數
-    qty_c: int  # 調整股數
-    qty_l: int  # 昨餘額股數
-    qty_s: int  # 今委賣股數
-    qty_sm: int  # 今委賣成交股數
-    rec_va_sum: float  # 未實現收入小計
-    s_type: str  # 市場別
-    stk_dats: list[InventoryDetail]  # 庫存明細
-    stk_na: str  # 股票名稱
-    stk_no: str  # 股票代碼
-    trade: Optional[int] = None  # 交易類別
-    value_mkt: float  # 市值(無假除權息)
-    value_now: float  # 市值(有假除權息)
+    ap_code: Optional[str] = None 
+    cost_qty: float  
+    cost_sum: float  
+    make_a_per: float
+    make_a_sum: float
+    price_avg: float 
+    price_evn: float 
+    price_mkt: float 
+    price_now: float 
+    price_qty_sum: float 
+    qty_b: int  
+    qty_bm: int 
+    qty_c: int  
+    qty_l: int  
+    qty_s: int  
+    qty_sm: int 
+    rec_va_sum: float 
+    s_type: str  
+    stk_dats: list[InventoryDetail] 
+    stk_na: str 
+    stk_no: str 
+    trade: Optional[int] = None 
+    value_mkt: float 
+    value_now: float 

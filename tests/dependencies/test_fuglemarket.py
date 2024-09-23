@@ -87,7 +87,7 @@ def test_get_intraday_quote(mock_rest_client):
             "time": 1725325198501421,
             "serial": 94416
         },
-        "isClose": True,
+        "isTrial": True,
         "serial": 3797531,
         "lastUpdated": 1725331190961515
     }
