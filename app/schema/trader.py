@@ -84,3 +84,8 @@ class SettlementResponse(BaseModel):
     c_date: str
     date: str
     price: str
+
+class BalanceResponse(BaseModel):
+    available_balance: int
+    exchange_balance: int
+    stock_pre_save_amount: int
