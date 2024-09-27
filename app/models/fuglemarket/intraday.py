@@ -63,9 +63,13 @@ class Quote(BaseModel):
     total: Total
     lastTrade: LastTrade
     lastTrial: LastTrial
-    isTrial: bool
-    serial: int
+    isTrial: Optional[bool] = False
+    isDelayedOpen: Optional[bool] = False
+    isDelayedClose: Optional[bool] = False
+    isOpen: Optional[bool] = False
+    isClose: Optional[bool] = False
     lastUpdated: int
+    serial: int
 
 
 class KLine(BaseModel):
