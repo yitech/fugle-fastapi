@@ -1,3 +1,4 @@
+from pydantic import TypeAdapter
 from app.dependencies.fugle import TraderSingleton
 from app.models.fugle import (
     OrderResult,
@@ -14,7 +15,8 @@ from app.schema.trader import (
     CancelResponse,
     MarketStatusResponse,
     SettlementResponse,
-    BalanceResponse
+    BalanceResponse,
+    InventoryResponse
 )
 from fugle_trade.order import OrderObject
 
@@ -63,3 +65,7 @@ def get_settlements(trader: TraderSingleton) -> list[SettlementResponse]:
 def get_balance(trader: TraderSingleton) -> BalanceResponse:
     balance: Balance = trader.get_balance()
     return BalanceResponse(**balance.model_dump())
+
+def get_inventories(trader: TraderSingleton) -> list[InventoryResponse]:
+    summaries = trader.get_inventories()
+    return [InventoryResponse(**summary.model.dump()) for summary in summaries]

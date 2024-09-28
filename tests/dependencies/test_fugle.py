@@ -164,3 +164,19 @@ def test_get_inventories(mock_trader, mock_trader_methods):
     assert detail.t_date == "20240904"
     assert detail.value_mkt == 68390
     assert detail.value_now == 68390
+
+@patch.object(TraderSingleton, 'trader', create=True)  # Mock TraderSingleton.trader
+def test_get_balance(mock_trader, mock_trader_methods):
+    mock_data = {
+        "available_balance": 500000, 
+        "exange_balance": 100000,  
+        "stock_pre_save_amount": 100000
+    }
+    # Mock the return value of self.trader.get_balance()
+    mock_trader.get_balance = MagicMock(return_value=mock_data)
+    # Create the TraderSingleton instance
+    trader = TraderSingleton()
+    balance = trader.get_balance()
+    mock_trader.get_balance.assert_called_once()
+
+    assert balance.available_balance == 500000

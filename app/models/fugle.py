@@ -123,7 +123,7 @@ class Settlement(BaseModel):
 
 class Balance(BaseModel):
     available_balance: int
-    exchange_balance: int
+    exange_balance: int
     stock_pre_save_amount: int
 
 
