@@ -68,4 +68,4 @@ def get_balance(trader: TraderSingleton) -> BalanceResponse:
 
 def get_inventories(trader: TraderSingleton) -> list[InventoryResponse]:
     summaries = trader.get_inventories()
-    return [InventoryResponse(**summary.model.dump()) for summary in summaries]
+    return [InventoryResponse(**summary.model_dump()) for summary in summaries]
