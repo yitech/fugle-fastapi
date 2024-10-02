@@ -64,6 +64,7 @@ def get_settlements(trader: TraderSingleton) -> list[SettlementResponse]:
 
 def get_balance(trader: TraderSingleton) -> BalanceResponse:
     balance: Balance = trader.get_balance()
+    # balance_dict["exchange_balance"] = balance_dict.pop("exange_balance") # typo in the model
     return BalanceResponse(**balance.model_dump())
 
 def get_inventories(trader: TraderSingleton) -> list[InventoryResponse]:

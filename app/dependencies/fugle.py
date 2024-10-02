@@ -90,6 +90,7 @@ class TraderSingleton:
     def get_balance(self) -> Balance:
         data = self.trader.get_balance()
         logger.info(f"Balance: {data}")
+        data["exchange_balance"] = data.pop("exange_balance") # fix typo in the model
         return Balance(**data)
     
     def get_inventories(self) -> list[InventorySummary]:
