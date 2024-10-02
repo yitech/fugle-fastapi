@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import Optional
 from datetime import date
 
 
@@ -58,14 +58,18 @@ class Quote(BaseModel):
     amplitude: float
     lastPrice: float
     lastSize: int
-    bids: List[BidAsk]
-    asks: List[BidAsk]
+    bids: list[BidAsk]
+    asks: list[BidAsk]
     total: Total
     lastTrade: LastTrade
     lastTrial: LastTrial
-    isTrial: bool
-    serial: int
+    isTrial: Optional[bool] = False
+    isDelayedOpen: Optional[bool] = False
+    isDelayedClose: Optional[bool] = False
+    isOpen: Optional[bool] = False
+    isClose: Optional[bool] = False
     lastUpdated: int
+    serial: int
 
 
 class KLine(BaseModel):
@@ -83,4 +87,4 @@ class KLines(BaseModel):
     exchange: str
     market: str
     timeframe: str
-    data: List[KLine]
+    data: list[KLine]

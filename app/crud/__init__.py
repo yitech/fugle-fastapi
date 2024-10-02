@@ -4,7 +4,9 @@ from .trader import (
     get_order_results,
     cancel_order,
     get_market_status,
-    get_settlements,  # get_balance, get_inventories
+    get_settlements,
+    get_balance,
+    get_inventories,
 )
 
 __all__ = [

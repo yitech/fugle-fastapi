@@ -5,6 +5,7 @@ from app.models.fugle import (
     CancelResult,
     MarketStatusResult,
     Settlement,
+    Balance,
 )
 from app.schema.trader import (
     CreateOrder,
@@ -13,6 +14,8 @@ from app.schema.trader import (
     CancelResponse,
     MarketStatusResponse,
     SettlementResponse,
+    BalanceResponse,
+    InventoryResponse,
 )
 from fugle_trade.order import OrderObject
 
@@ -56,3 +59,13 @@ def get_settlements(trader: TraderSingleton) -> list[SettlementResponse]:
     for settlement in settlement_result:
         res.append(SettlementResponse(**settlement.model_dump()))
     return res
+
+
+def get_balance(trader: TraderSingleton) -> BalanceResponse:
+    balance: Balance = trader.get_balance()
+    return BalanceResponse(**balance.model_dump())
+
+
+def get_inventories(trader: TraderSingleton) -> list[InventoryResponse]:
+    summaries = trader.get_inventories()
+    return [InventoryResponse(**summary.model_dump()) for summary in summaries]

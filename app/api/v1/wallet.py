@@ -1,8 +1,8 @@
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from app.dependencies import get_trader
-from app.crud import get_settlements
-from app.schema.trader import SettlementResponse
+from app.crud import get_settlements, get_balance, get_inventories
+from app.schema.trader import SettlementResponse, BalanceResponse, InventoryResponse
 import logging
 
 logger = logging.getLogger("fugle")
@@ -25,13 +25,31 @@ def get_settlements_endpoint(trader=Depends(get_trader)):
         return HTTPException(status_code=500, detail="Internal Server Error")
 
 
-"""
-@router.get("/balance", response_model="Balance")
-def get_balance():
-    return {"message": "Not implemented yet"}
+@router.get("/balance", response_model=BalanceResponse)
+def get_balance_endpoint(trader=Depends(get_trader)):
+    try:
+        res = get_balance(trader)
+        return res
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"RequestException: {req_err}")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {e}")
+        return HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/inventories", response_model="Inventories")
-def get_inventories():
-    return {"message": "Not implemented yet"}
-"""
+@router.get("/inventories", response_model=InventoryResponse)
+def get_inventories_endpoint(trader=Depends(get_trader)):
+    try:
+        res = get_inventories(trader)
+        return res
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"RequestException: {req_err}")
+        return HTTPException(
+            status_code=500, detail="Error connecting to the trading service."
+        )
+    except Exception as e:
+        logger.error(f"Unhandled Exception: {e}")
+        return HTTPException(status_code=500, detail="Internal Server Error")

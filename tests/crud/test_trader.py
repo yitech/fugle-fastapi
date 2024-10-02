@@ -6,9 +6,13 @@ from app.schema.trader import (
     SettlementResponse
 )
 from app.models.fugle import (
-    OrderResult, OrderPlacement, CancelResult, MarketStatusResult, Settlement
+    OrderResult, OrderPlacement, CancelResult, 
+    MarketStatusResult, Settlement, Balance
 )
-from app.crud import create_order, get_order_results, cancel_order, get_market_status, get_settlements
+from app.crud import (
+    create_order, get_order_results, cancel_order, 
+    get_market_status, get_settlements, get_balance
+)
 
 
 @pytest.fixture
@@ -178,4 +182,21 @@ def test_get_emtpy_settlements(mock_trader):
     # Assertions
     mock_trader.get_settlements.assert_called_once()
     assert len(response) == 0
+
+def test_get_balance(mock_trader):
+    mock_balance = Balance(
+        available_balance=1000,
+        exchange_balance=1000,
+        stock_pre_save_amount=1000
+    )
+    mock_trader.get_balance.return_value = mock_balance
+
+    # Call the function
+    response = get_balance(mock_trader)
+
+    # Assertions
+    mock_trader.get_balance.assert_called_once()
+    assert response.available_balance == mock_balance.available_balance
+    assert response.exchange_balance == mock_balance.exchange_balance
+    assert response.stock_pre_save_amount == mock_balance.stock_pre_save_amount
 
