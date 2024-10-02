@@ -169,7 +169,7 @@ def test_get_inventories(mock_trader, mock_trader_methods):
 def test_get_balance(mock_trader, mock_trader_methods):
     mock_data = {
         "available_balance": 500000, 
-        "exange_balance": 100000,  
+        "exchange_balance": 100000,  
         "stock_pre_save_amount": 100000
     }
     # Mock the return value of self.trader.get_balance()
