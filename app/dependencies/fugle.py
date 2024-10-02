@@ -13,7 +13,7 @@ from app.models.fugle import (
     MarketStatusResult,
     Settlement,
     Balance,
-    InventorySummary
+    InventorySummary,
 )
 from app.core.config import settings
 import logging
@@ -86,18 +86,17 @@ class TraderSingleton:
         data = self.trader.get_settlements()
         res = [Settlement(**item) for item in data]
         return res
-    
+
     def get_balance(self) -> Balance:
         data = self.trader.get_balance()
         logger.info(f"Balance: {data}")
-        data["exchange_balance"] = data.pop("exange_balance") # fix typo in the model
+        data["exchange_balance"] = data.pop("exange_balance")  # fix typo in the model
         return Balance(**data)
-    
+
     def get_inventories(self) -> list[InventorySummary]:
         data = self.trader.get_inventories()
         adapter = TypeAdapter(list[InventorySummary])
         return adapter.validate_python(data)
-    
 
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:
