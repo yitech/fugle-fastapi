@@ -40,7 +40,7 @@ def get_balance_endpoint(trader=Depends(get_trader)):
         return HTTPException(status_code=500, detail="Internal Server Error")
 
 
-@router.get("/inventories", response_model=InventoryResponse)
+@router.get("/inventories", response_model=list[InventoryResponse])
 def get_inventories_endpoint(trader=Depends(get_trader)):
     try:
         res = get_inventories(trader)
