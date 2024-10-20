@@ -4,16 +4,9 @@ from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
-from pydantic import TypeAdapter
 from app.models.fugle import (
     OrderResult,
-    OrderPlacement,
     NotifyAck,
-    CancelResult,
-    MarketStatusResult,
-    Settlement,
-    Balance,
-    InventorySummary,
 )
 from app.core.config import settings
 import logging
@@ -82,17 +75,17 @@ class TraderSingleton:
         res = self.trader.get_market_status()
         return res
 
-    def get_settlements(self) -> list[Settlement]:
+    def get_settlements(self) -> list[dict]:
         res = self.trader.get_settlements()
         logger.info(f"Settlements: {res}")
         return res
 
-    def get_balance(self) -> Balance:
+    def get_balance(self) -> dict:
         res = self.trader.get_balance()
         logger.info(f"Balance: {res}")
         return res
 
-    def get_inventories(self) -> list[InventorySummary]:
+    def get_inventories(self) -> list[dict]:
         res = self.trader.get_inventories()
         logger.info(f"Inventories: {res}")
         return res

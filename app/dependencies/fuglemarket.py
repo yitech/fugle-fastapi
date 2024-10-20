@@ -3,8 +3,6 @@ from app.core.config import settings
 from fugle_marketdata import RestClient
 import logging
 
-import requests
-
 FUGLE_MARKET_API_KEY = settings.fugle_market_api_key
 
 logger = logging.getLogger("fugle")

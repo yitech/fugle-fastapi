@@ -3,7 +3,6 @@ from pydantic import ValidationError
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.v1 import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
-import requests
 import logging
 
 logger = logging.getLogger("fugle")
