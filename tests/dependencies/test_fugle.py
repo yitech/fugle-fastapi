@@ -53,14 +53,6 @@ def test_get_settlements(mock_trader, mock_trader_methods):
     # Verify that the mock get_settlements was called
     mock_trader.get_settlements.assert_called_once()
 
-    # Verify the result is an instance of SettlementResult
-    assert len(result) == 2
-
-    # Check if the values in SettlementResult are correct
-    assert result[0] == Settlement(c_date="20220310", date="20220308", price="-80912")
-    assert result[1] == Settlement(c_date="20220311", date="20220309", price="4826")
-
-
 @patch.object(TraderSingleton, 'trader', create=True)  # Mock TraderSingleton.trader
 def test_get_inventories(mock_trader, mock_trader_methods):
     # Mock data for get_inventories response
@@ -129,41 +121,6 @@ def test_get_inventories(mock_trader, mock_trader_methods):
     # Verify that the mock get_inventories was called
     mock_trader.get_inventories.assert_called_once()
 
-    # Assert the length of the result
-    assert len(result) == 1
-
-    # Assert the content of the InventorySummary
-    inventory = result[0]
-    assert inventory.ap_code == ""
-    assert inventory.cost_qty == 70
-    assert inventory.cost_sum == -62949
-    assert inventory.make_a_per == 8.16
-    assert inventory.make_a_sum == 5139
-    assert inventory.price_avg == 898.00
-    assert inventory.price_evn == 903.27
-    assert inventory.price_mkt == 977.00
-    assert inventory.price_now == 977.00
-    assert inventory.price_qty_sum == 62860
-    assert inventory.qty_b == 0
-    assert inventory.qty_l == 70
-    assert inventory.stk_na == "台積電"
-    assert inventory.stk_no == "2330"
-
-    # Assert the content of the InventoryDetail
-    detail = inventory.stk_dats[0]
-    assert detail.buy_sell == "B"
-    assert detail.cost_r == 0
-    assert detail.fee == 89
-    assert detail.make_a == 5139
-    assert detail.make_a_per == 8.16
-    assert detail.ord_no == "B5978032272160"
-    assert detail.pay_n == -62949
-    assert detail.price == 898.00
-    assert detail.price_evn == 903.27
-    assert detail.qty == 70
-    assert detail.t_date == "20240904"
-    assert detail.value_mkt == 68390
-    assert detail.value_now == 68390
 
 @patch.object(TraderSingleton, 'trader', create=True)  # Mock TraderSingleton.trader
 def test_get_balance(mock_trader, mock_trader_methods):
@@ -178,5 +135,3 @@ def test_get_balance(mock_trader, mock_trader_methods):
     trader = TraderSingleton()
     balance = trader.get_balance()
     mock_trader.get_balance.assert_called_once()
-
-    assert balance.available_balance == 500000

@@ -61,12 +61,12 @@ class TraderSingleton:
             schedule.run_pending()
             time.sleep(1)
 
-    def place_order(self, order: OrderObject) -> OrderPlacement:
+    def place_order(self, order: OrderObject) -> dict:
         res = self.trader.place_order(order)
         logger.info(f"Order placed: {res}")
         return res
 
-    def cancel_order(self, ord_no: str) -> CancelResult:
+    def cancel_order(self, ord_no: str) -> dict:
         if ord_no not in self.orders:
             raise ValueError(f"Order number {ord_no} not found")
         order_result = self.orders[ord_no]
