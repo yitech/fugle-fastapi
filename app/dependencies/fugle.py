@@ -64,7 +64,7 @@ class TraderSingleton:
     def place_order(self, order: OrderObject) -> OrderPlacement:
         res = self.trader.place_order(order)
         logger.info(f"Order placed: {res}")
-        return OrderPlacement(**res)
+        return res
 
     def cancel_order(self, ord_no: str) -> CancelResult:
         if ord_no not in self.orders:
@@ -73,7 +73,7 @@ class TraderSingleton:
         logger.info(f"Cancelling order {order_result}")
         res = self.trader.cancel_order(order_result.model_dump_with_enum())
         logger.info(f"Order {res} cancelled")
-        return CancelResult(**res)
+        return res
 
     def get_order_results(self):
         return list(self.orders.values())

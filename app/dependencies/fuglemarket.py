@@ -58,6 +58,7 @@ class MarketSingleton:
         res = stock.historical.candles(
             symbol=symbol, **{"from": from_date, "to": to_date, "timeframe": resolution}
         )
+        logger.info(f"candles = {res}")
         return res
 
 

@@ -1,4 +1,5 @@
 from typing import Literal
+from pydantic import ValidationError
 from fastapi import APIRouter, Depends, HTTPException
 from app.schema.v1 import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
@@ -20,20 +21,15 @@ def get_quote(
         res = market.get_intraday_quote(symbol, type)
         response = QuoteResponse(**res)
         return response
-    except requests.exceptions.HTTPError as http_err:
-        logger.error(f"HTTPError: {http_err}")
-        raise HTTPException(status_code=400, detail=f"HTTP Error: {str(http_err)}")
-    except requests.exceptions.RequestException as req_err:
-        logger.error(f"RequestException: {req_err}")
-        raise HTTPException(
-            status_code=500, detail="Error connecting to the market data source."
-        )
-    except ValueError as val_err:
-        logger.error(f"ValueError: {val_err}")
-        raise HTTPException(status_code=422, detail=f"Invalid input: {str(val_err)}")
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @router.get("/historical/candles", response_model=KLinesResponse)
@@ -48,17 +44,12 @@ def get_candles(
         res = market.get_historical_candles(symbol, from_date, to_date, resolution)
         response = KLinesResponse(**res)
         return response
-    except requests.exceptions.HTTPError as http_err:
-        logger.error(f"HTTPError: {http_err}")
-        raise HTTPException(status_code=400, detail=f"HTTP Error: {str(http_err)}")
-    except requests.exceptions.RequestException as req_err:
-        logger.error(f"RequestException: {req_err}")
-        raise HTTPException(
-            status_code=500, detail="Error connecting to the market data source."
-        )
-    except ValueError as val_err:
-        logger.error(f"ValueError: {val_err}")
-        raise HTTPException(status_code=422, detail=f"Invalid input: {str(val_err)}")
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")
