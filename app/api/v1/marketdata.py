@@ -1,6 +1,6 @@
 from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema import QuoteResponse, KLinesResponse
+from app.schema.v1 import QuoteResponse, KLinesResponse
 from app.dependencies import get_market
 from app.crud import get_intraday_quote, get_historical_candles
 import requests
@@ -18,8 +18,9 @@ def get_quote(
     market=Depends(get_market),
 ):
     try:
-        res = get_intraday_quote(market, symbol, type)
-        return res
+        res = market.get_intraday_quote(symbol, type)
+        response = QuoteResponse(**res)
+        return response
     except requests.exceptions.HTTPError as http_err:
         logger.error(f"HTTPError: {http_err}")
         raise HTTPException(status_code=400, detail=f"HTTP Error: {str(http_err)}")

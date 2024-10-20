@@ -26,17 +26,16 @@ class MarketSingleton:
 
     def get_intraday_quote(
         self, symbol: str, kind: Literal["oddlot", "EQUITY"] = "EQUITY"
-    ) -> Quote:
+    ) -> dict:
         stock = self.client.stock
         if kind == "EQUITY":
             res = stock.intraday.quote(symbol=symbol)
         else:  # kind == "oddlot":
             res = stock.intraday.quote(symbol=symbol, type=kind)
         if res.get("statusCode", 200) != 200:
-            raise Exception(f"Error: {res.get('message')}")
+            logger.error(f"ErrorResponse: {res}")
         logger.info(f"quote = {res}")
-        quote = Quote(**res)
-        return quote
+        return res
 
     def get_historical_candles(
         self, symbol: str, from_date: str, to_date: str, resolution: str = "D"
