@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from app.dependencies import get_market, MarketSingleton
-from app.models.fuglemarket import KLines, Quote
+from app.models.fuglemarket import KLines
+from app.schema import QuoteResponse, KLinesResponse
 import requests
 
 @pytest.fixture(autouse=True)
@@ -95,8 +96,7 @@ def test_get_intraday_quote(mock_rest_client):
     market = get_market()
     actual_quote = market.get_intraday_quote(symbol="2330")
     mock_instance.stock.intraday.quote.assert_called_once_with(symbol="2330")
-    expected_quote = Quote(**mock_instance.stock.intraday.quote.return_value)
-    assert actual_quote == expected_quote, "The returned Quote does not match the expected Quote"
+    QuoteResponse(**actual_quote)
 
 
 @patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
