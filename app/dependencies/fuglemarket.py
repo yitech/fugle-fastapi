@@ -1,5 +1,4 @@
 from typing import Literal
-from app.models.fuglemarket import Quote, KLines
 from app.core.config import settings
 from fugle_marketdata import RestClient
 import logging

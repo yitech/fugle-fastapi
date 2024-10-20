@@ -1,8 +1,7 @@
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from app.dependencies import get_trader
-from app.crud import get_settlements, get_balance, get_inventories
-from app.schema.trader import SettlementResponse, BalanceResponse, InventoryResponse
+from app.schema.v1 import SettlementResponse, BalanceResponse, InventoryResponse
 from pydantic import TypeAdapter
 import logging
 
@@ -46,7 +45,7 @@ def get_balance_endpoint(trader=Depends(get_trader)):
 @router.get("/inventories", response_model=list[InventoryResponse])
 def get_inventories_endpoint(trader=Depends(get_trader)):
     try:
-        res = get_inventories(trader)
+        res = trader.get_inventories()
         logger.info(f"Inventories: {res}")
         adapter = TypeAdapter(list[InventoryResponse])
         return adapter.validate_python(res)
