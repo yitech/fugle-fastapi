@@ -39,7 +39,7 @@ class MarketSingleton:
 
     def get_historical_candles(
         self, symbol: str, from_date: str, to_date: str, resolution: str = "D"
-    ) -> KLines:
+    ) -> dict:
         """
         Get historical candles for a stock.
         Parameters:
@@ -58,13 +58,7 @@ class MarketSingleton:
         res = stock.historical.candles(
             symbol=symbol, **{"from": from_date, "to": to_date, "timeframe": resolution}
         )
-        if res.get("statusCode", 200) == 200:
-            klines = KLines(**res)
-            return klines
-        elif res.get("statusCode", 200) == 404:
-            raise requests.exceptions.HTTPError(f"Error: {res.get('message')}")
-        else:
-            raise Exception(f"Error: {res.get('message')}")
+        return res
 
 
 def get_market():

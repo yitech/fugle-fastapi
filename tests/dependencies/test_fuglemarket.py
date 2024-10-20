@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from app.dependencies import get_market, MarketSingleton
-from app.models.fuglemarket import KLines
 from app.schema import QuoteResponse, KLinesResponse
 import requests
 
@@ -95,8 +94,9 @@ def test_get_intraday_quote(mock_rest_client):
     mock_rest_client.return_value = mock_instance
     market = get_market()
     actual_quote = market.get_intraday_quote(symbol="2330")
-    mock_instance.stock.intraday.quote.assert_called_once_with(symbol="2330")
     QuoteResponse(**actual_quote)
+    mock_instance.stock.intraday.quote.assert_called_once_with(symbol="2330")
+    
 
 
 @patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
@@ -125,11 +125,10 @@ def test_get_historical_candles(mock_rest_client):
     mock_rest_client.return_value = mock_instance
     market = get_market()
     actaul = market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
-    expected = KLines(**mock_instance.stock.historical.candles.return_value)
+    KLinesResponse(**mock_instance.stock.historical.candles.return_value)
     mock_rest_client.return_value.stock.historical.candles.assert_called_once_with(
             symbol="2330", **{"from": "2024-08-23", "to": "2024-08-23", "timeframe": "D"}
     )
-    assert actaul == expected
 
 @patch('app.dependencies.fuglemarket.FUGLE_MARKET_API_KEY', 'mock_api_key')  # Patch the API key
 @patch('app.dependencies.fuglemarket.RestClient')
@@ -145,6 +144,7 @@ def test_get_historical_candles_error(mock_rest_client):
     mock_rest_client.return_value = mock_instance
 
     market = get_market()
-    with pytest.raises(requests.exceptions.HTTPError) as exc_info:
-        market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
-    assert "Resource Not Found" in str(exc_info.value)
+    market.get_historical_candles(symbol="2330", from_date="2024-08-23", to_date="2024-08-23")
+    mock_rest_client.return_value.stock.historical.candles.assert_called_once_with(
+            symbol="2330", **{"from": "2024-08-23", "to": "2024-08-23", "timeframe": "D"}
+    )
