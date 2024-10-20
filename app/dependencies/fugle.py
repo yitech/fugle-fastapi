@@ -80,23 +80,22 @@ class TraderSingleton:
 
     def get_market_status(self):
         res = self.trader.get_market_status()
-        return MarketStatusResult(**res)
+        return res
 
     def get_settlements(self) -> list[Settlement]:
-        data = self.trader.get_settlements()
-        res = [Settlement(**item) for item in data]
+        res = self.trader.get_settlements()
+        logger.info(f"Settlements: {res}")
         return res
 
     def get_balance(self) -> Balance:
-        data = self.trader.get_balance()
-        logger.info(f"Balance: {data}")
-        # data["exchange_balance"] = data.pop("exange_balance")  # fix typo in the model
-        return Balance(**data)
+        res = self.trader.get_balance()
+        logger.info(f"Balance: {res}")
+        return res
 
     def get_inventories(self) -> list[InventorySummary]:
-        data = self.trader.get_inventories()
-        adapter = TypeAdapter(list[InventorySummary])
-        return adapter.validate_python(data)
+        res = self.trader.get_inventories()
+        logger.info(f"Inventories: {res}")
+        return res
 
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:
