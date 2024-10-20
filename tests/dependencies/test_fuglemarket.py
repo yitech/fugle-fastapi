@@ -1,8 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from app.dependencies import get_market, MarketSingleton
-from app.schema import QuoteResponse, KLinesResponse
-import requests
+from app.schema.v1 import QuoteResponse, KLinesResponse
 
 @pytest.fixture(autouse=True)
 def reset_singleton():
