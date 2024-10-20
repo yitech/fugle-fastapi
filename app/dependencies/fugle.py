@@ -4,16 +4,9 @@ from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
 from fugle_trade.order import OrderObject
-from pydantic import TypeAdapter
 from app.models.fugle import (
     OrderResult,
-    OrderPlacement,
     NotifyAck,
-    CancelResult,
-    MarketStatusResult,
-    Settlement,
-    Balance,
-    InventorySummary,
 )
 from app.core.config import settings
 import logging
@@ -61,42 +54,41 @@ class TraderSingleton:
             schedule.run_pending()
             time.sleep(1)
 
-    def place_order(self, order: OrderObject) -> OrderPlacement:
+    def place_order(self, order: OrderObject) -> dict:
         res = self.trader.place_order(order)
         logger.info(f"Order placed: {res}")
-        return OrderPlacement(**res)
+        return res
 
-    def cancel_order(self, ord_no: str) -> CancelResult:
+    def cancel_order(self, ord_no: str) -> dict:
         if ord_no not in self.orders:
             raise ValueError(f"Order number {ord_no} not found")
         order_result = self.orders[ord_no]
         logger.info(f"Cancelling order {order_result}")
         res = self.trader.cancel_order(order_result.model_dump_with_enum())
         logger.info(f"Order {res} cancelled")
-        return CancelResult(**res)
+        return res
 
     def get_order_results(self):
         return list(self.orders.values())
 
     def get_market_status(self):
         res = self.trader.get_market_status()
-        return MarketStatusResult(**res)
-
-    def get_settlements(self) -> list[Settlement]:
-        data = self.trader.get_settlements()
-        res = [Settlement(**item) for item in data]
         return res
 
-    def get_balance(self) -> Balance:
-        data = self.trader.get_balance()
-        logger.info(f"Balance: {data}")
-        # data["exchange_balance"] = data.pop("exange_balance")  # fix typo in the model
-        return Balance(**data)
+    def get_settlements(self) -> list[dict]:
+        res = self.trader.get_settlements()
+        logger.info(f"Settlements: {res}")
+        return res
 
-    def get_inventories(self) -> list[InventorySummary]:
-        data = self.trader.get_inventories()
-        adapter = TypeAdapter(list[InventorySummary])
-        return adapter.validate_python(data)
+    def get_balance(self) -> dict:
+        res = self.trader.get_balance()
+        logger.info(f"Balance: {res}")
+        return res
+
+    def get_inventories(self) -> list[dict]:
+        res = self.trader.get_inventories()
+        logger.info(f"Inventories: {res}")
+        return res
 
     def _get_order_results(self) -> dict[str, OrderResult]:
         try:

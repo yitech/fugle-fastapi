@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.schema.trader import (
+from pydantic import ValidationError
+from app.schema.v1 import (
     CreateOrder,
     OrderResponse,
     OrderResultResponse,
@@ -7,9 +8,7 @@ from app.schema.trader import (
     MarketStatusResponse,
 )
 from app.dependencies import get_trader
-from app.crud import create_order, get_order_results, cancel_order, get_market_status
 import logging
-import requests
 
 logger = logging.getLogger("fugle")
 
@@ -19,62 +18,66 @@ router = APIRouter()
 @router.post("/order", response_model=OrderResponse)
 def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
     try:
-        res = create_order(trader, order)
-        return res
-    except ValueError as e:
-        logger.error(f"ValueError: {e}")
-        return HTTPException(status_code=422, detail=f"Invalid input: {str(e)}")
-    except requests.exceptions.RequestException as req_err:
-        logger.error(f"RequestException: {req_err}")
-        return HTTPException(
-            status_code=500, detail="Error connecting to the trading service."
-        )
+        res = trader.create_order(order)
+        response = OrderResponse(**res)
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        return HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @router.get("/orders", response_model=list[OrderResultResponse])
 def get_orders_endpoint(trader=Depends(get_trader)):
     try:
-        res = get_order_results(trader)
-        return res
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTPError: {e}")
-        return HTTPException(status_code=404, detail="Orders not found")
-    except requests.exceptions.RequestException as req_err:
-        logger.error(f"RequestException: {req_err}")
-        return HTTPException(
-            status_code=500, detail="Error connecting to the trading service."
-        )
+        res = trader.get_order_results()
+        response = [OrderResultResponse(**item) for item in res]
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        return HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @router.delete("/order/{ord_no}", response_model=CancelResponse)
 def delete_order_endpoint(ord_no: str, trader=Depends(get_trader)):
     try:
-        res = cancel_order(trader, ord_no)
-        return res
-    except requests.exceptions.HTTPError as e:
-        logger.error(f"HTTPError: {e}")
-        return HTTPException(status_code=404, detail="Order not found")
-    except requests.exceptions.RequestException as req_err:
-        logger.error(f"RequestException: {req_err}")
-        return HTTPException(
-            status_code=500, detail="Error connecting to the trading service."
-        )
+        res = trader.cancel_order(ord_no)
+        response = CancelResponse(**res)
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        return HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @router.get("/market_status", response_model=MarketStatusResponse)
 def get_market_status_endpoint(trader=Depends(get_trader)):
     try:
-        res = get_market_status(trader)
-        return res
+        res = trader.get_market_status()
+        response = MarketStatusResponse(**res)
+        return response
+    except ValidationError as e:
+        logger.error(f"ValidationError: {e}")
+        raise HTTPException(status_code=422, detail=str(e))
+    except KeyError as e:
+        logger.error(f"KeyError: {e}")
+        raise HTTPException(status_code=400, detail=f"Missing key: {e}")
     except Exception as e:
         logger.error(f"Unhandled Exception: {e}")
-        return HTTPException(status_code=500, detail="Internal Server Error")
+        raise HTTPException(status_code=500, detail="Internal server error")

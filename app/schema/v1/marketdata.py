@@ -35,7 +35,7 @@ class LastTrial(BaseModel):
     serial: int
 
 
-class Quote(BaseModel):
+class QuoteResponse(BaseModel):
     date: date
     type: str
     exchange: str
@@ -81,7 +81,7 @@ class KLine(BaseModel):
     volume: int
 
 
-class KLines(BaseModel):
+class KLinesResponse(BaseModel):
     symbol: str
     type: str
     exchange: str
