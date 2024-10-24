@@ -98,6 +98,11 @@ pytest --cov=app --cov-report=html
 ```
 
 ## Generate Client Code
+Run the server first and request the openapi.json
+``` bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
 ``` bash
 openapi-generator-cli generate -c ./openapi_generator_config.json
 ```
