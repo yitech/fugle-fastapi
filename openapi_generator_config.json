@@ -1,7 +1,7 @@
 {
     "generatorName": "python",
     "inputSpec": "http://localhost:8000/openapi.json",
-    "outputDir": ".",
+    "outputDir": "../fugle-fastapi-client",
     "additionalProperties": {
         "packageName": "fugle_fastapi_client",
         "projectName": "FugleFastApiClient"

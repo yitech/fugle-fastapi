@@ -96,3 +96,8 @@ mypy --ignore-missing-imports --check-untyped-defs app
 pip install pytest httpx pytest-asyncio pytest-cov
 pytest --cov=app --cov-report=html
 ```
+
+## Generate Client Code
+``` bash
+openapi-generator-cli generate -c ./openapi_generator_config.json
+```
