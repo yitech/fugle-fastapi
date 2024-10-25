@@ -1,6 +1,9 @@
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from enum import Enum
 from fugle_trade.constant import APCode, Trade, PriceFlag, BSFlag, Action
 
+
+    
 
 class CreateOrder(BaseModel):
     buy_sell: Action
@@ -11,6 +14,9 @@ class CreateOrder(BaseModel):
     stock_no: str
     quantity: int = Field(..., gt=0)
     price: float = Field(..., gt=0)
+
+    class Config:
+        allow_population_by_field_name = True  # allow population by original field name
 
     @field_validator("quantity")
     def validate_quantity(cls, v: int, info: ValidationInfo):
