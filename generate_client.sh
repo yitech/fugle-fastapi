@@ -24,7 +24,14 @@ yq eval '
 
 
 # Step 4: Regenerate the client code based on the modified openapi.yaml file
-openapi-generator-cli generate -i "./$OUTPUT_DIR/api/openapi.yaml" -g go -o "./$OUTPUT_DIR"
+openapi-generator-cli generate \
+    -i "./$OUTPUT_DIR/api/openapi.yaml" \
+    -g go \
+    -o "./$OUTPUT_DIR" \
+    --package-name fuglego \
+    --git-host github.com \
+    --git-user-id yitech \
+    --git-repo-id fugle-go
 
 cd "$OUTPUT_DIR" && chmod +x ./git_push.sh && /bin/sh ./git_push.sh yitech fugle-go "minor update" "github.com"
 

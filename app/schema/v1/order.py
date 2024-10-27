@@ -15,9 +15,6 @@ class CreateOrder(BaseModel):
     quantity: int = Field(..., gt=0)
     price: float = Field(..., gt=0)
 
-    class Config:
-        allow_population_by_field_name = True  # allow population by original field name
-
     @field_validator("quantity")
     def validate_quantity(cls, v: int, info: ValidationInfo):
         ap_code = info.data.get("ap_code")
