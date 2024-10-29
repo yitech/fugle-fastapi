@@ -1,5 +1,6 @@
 import schedule
 import time
+from typing import Literal
 from threading import Thread
 from configparser import ConfigParser
 from fugle_trade.sdk import SDK
@@ -88,6 +89,11 @@ class TraderSingleton:
     def get_inventories(self) -> list[dict]:
         res = self.trader.get_inventories()
         logger.info(f"Inventories: {res}")
+        return res
+    
+    def get_trade_history(self, query_range: Literal["0d", "3d", "1m", "3m"]) -> list[dict]:
+        res = self.trader.get_transactions(query_range)
+        logger.info(f"Trade history: {res}")
         return res
 
     def _get_order_results(self) -> dict[str, OrderResult]:

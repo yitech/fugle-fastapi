@@ -81,3 +81,43 @@ class MarketStatusResponse(BaseModel):
     is_trading_day: bool
     last_trading_day: str
     next_trading_day: str
+
+
+class MatDetail(BaseModel):
+    buy_sell: str
+    c_date: str
+    db_fee: str = "0"
+    fee: str
+    make: int
+    make_per: float
+    order_no: str
+    pay_n: str
+    price: str
+    price_qty: str
+    qty: str
+    s_type: str
+    stk_na: str
+    stk_no: str
+    t_date: str
+    t_time: str = ""
+    tax: str
+    tax_g: str
+    trade: int
+    user_def: str = ""
+
+class TransactionResponse(BaseModel):
+    buy_sell: str
+    c_date: str
+    cost: int
+    make: int
+    make_per: float
+    mat_dats: list[MatDetail]
+    price_avg: str
+    price_qty: str
+    qty: str
+    recv: int
+    s_type: str
+    stk_na: str
+    stk_no: str
+    t_date: str
+    trade: int
