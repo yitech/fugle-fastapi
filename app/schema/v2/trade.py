@@ -32,7 +32,7 @@ class TransactionResponse(BaseModel):
     order_no: str
     price: float
     qty: int
-    stk_no: str
+    symbol: str
     tax: int
     trade: int
 
@@ -78,7 +78,7 @@ class TransactionResponse(BaseModel):
             order_no=data["order_no"],
             price=float(data["price"]),
             qty=int(data["qty"]),
-            stk_no=data["stk_no"],
+            symbol=data["stk_no"],
             tax=int(data["tax"]),
             trade=data["trade"]
         )
