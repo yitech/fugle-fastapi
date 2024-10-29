@@ -7,3 +7,4 @@ fugle-marketdata>=2.2.0
 schedule
 requests
 types-requests
+cachetools
