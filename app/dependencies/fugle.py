@@ -11,6 +11,8 @@ from app.models.fugle import (
 )
 from app.core.config import settings
 import logging
+import cachetools.func
+
 
 FUGLE_TRADE_CONFIG = settings.fugle_trade_config
 
@@ -20,6 +22,7 @@ logger = logging.getLogger("fugle")
 
 class TraderSingleton:
     _instance = None
+    # Set up a cache with a TTL of 1 minute and a max size of 100 entries
 
     def __new__(cls):
         if cls._instance is None:
@@ -76,16 +79,19 @@ class TraderSingleton:
         res = self.trader.get_market_status()
         return res
 
+    @cachetools.func.ttl_cache(maxsize=8, ttl=60)
     def get_settlements(self) -> list[dict]:
         res = self.trader.get_settlements()
         logger.info(f"Settlements: {res}")
         return res
 
+    @cachetools.func.ttl_cache(maxsize=8, ttl=60)
     def get_balance(self) -> dict:
         res = self.trader.get_balance()
         logger.info(f"Balance: {res}")
         return res
 
+    @cachetools.func.ttl_cache(maxsize=8, ttl=60)
     def get_inventories(self) -> list[dict]:
         res = self.trader.get_inventories()
         logger.info(f"Inventories: {res}")
@@ -97,6 +103,9 @@ class TraderSingleton:
         return res
 
     def _get_order_results(self) -> dict[str, OrderResult]:
+        """
+            To be refactor
+        """
         try:
             order_results = self.trader.get_order_results()
         except ValueError as e:

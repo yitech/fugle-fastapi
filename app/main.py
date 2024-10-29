@@ -52,6 +52,7 @@ app.include_router(v1.marketdata.router, prefix="/api/v1", tags=["Market"])
 app.include_router(v1.wallet.router, prefix="/api/v1", tags=["Wallet"])
 # V2 API
 app.include_router(v2.trade.router, prefix="/api/v2", tags=["Trade"])
+app.include_router(v2.wallet.router, prefix="/api/v2", tags=["Wallet"])
 
 @app.get("/api/v1/ping", tags=["System"])
 def ping():
