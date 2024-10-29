@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from app.api.v1 import marketdata, order, wallet
+from app.api import v1, v2
 from app.dependencies.fugle import TraderSingleton
 from app.dependencies.fuglemarket import MarketSingleton
 from app.middleware.auth import middleware
@@ -46,11 +46,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan, middleware=middleware)
-
-app.include_router(order.router, prefix="/api/v1", tags=["Order"])
-app.include_router(marketdata.router, prefix="/api/v1", tags=["Market"])
-app.include_router(wallet.router, prefix="/api/v1", tags=["Wallet"])
-
+# V1 API
+app.include_router(v1.order.router, prefix="/api/v1", tags=["Order"])
+app.include_router(v1.marketdata.router, prefix="/api/v1", tags=["Market"])
+app.include_router(v1.wallet.router, prefix="/api/v1", tags=["Wallet"])
+# V2 API
+app.include_router(v2.trade.router, prefix="/api/v2", tags=["Trade"])
 
 @app.get("/api/v1/ping", tags=["System"])
 def ping():
