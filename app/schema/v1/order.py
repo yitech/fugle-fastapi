@@ -14,6 +14,7 @@ class CreateOrder(BaseModel):
     stock_no: str
     quantity: int = Field(..., gt=0)
     price: float = Field(..., gt=0)
+    user_def: str = ""
 
     @field_validator("quantity")
     def validate_quantity(cls, v: int, info: ValidationInfo):

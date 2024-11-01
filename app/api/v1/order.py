@@ -21,7 +21,7 @@ router = APIRouter()
 @router.post("/order", response_model=OrderResponse)
 def create_order_endpoint(order: CreateOrder, trader=Depends(get_trader)):
     try:
-        res = trader.create_order(order)
+        res = trader.place_order(order)
         response = OrderResponse(**res)
         return response
     except ValidationError as e:
